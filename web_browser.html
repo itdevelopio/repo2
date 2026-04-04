@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GoogleBot Web Browser</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .browser {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            height: 90vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .browser-header {
+            background: #f5f5f5;
+            padding: 15px 20px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .address-bar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        .address-bar input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            font-family: 'Courier New', monospace;
+            transition: border-color 0.3s;
+        }
+
+        .address-bar input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .address-bar button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .address-bar button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .address-bar button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .browser-controls {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .browser-controls label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 0;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .browser-controls input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        .agent-badge {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 8px 12px;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #1565c0;
+        }
+
+        .browser-content {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .browser-main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .browser-sidebar {
+            width: 300px;
+            border-left: 1px solid #ddd;
+            display: flex;
+            flex-direction: column;
+            background: #f9f9f9;
+        }
+
+        .sidebar-title {
+            padding: 15px;
+            font-weight: 600;
+            border-bottom: 1px solid #ddd;
+            background: #f0f0f0;
+            font-size: 12px;
+            text-transform: uppercase;
+            color: #666;
+        }
+
+        .sidebar-content {
+            flex: 1;
+            overflow-y: auto;
+            font-size: 11px;
+            padding: 10px;
+        }
+
+        .request-details {
+            background: white;
+            border-radius: 3px;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-left: 3px solid #2196f3;
+        }
+
+        .request-details h4 {
+            font-size: 11px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+
+        .request-details p {
+            font-family: 'Courier New', monospace;
+            word-break: break-all;
+            margin: 3px 0;
+            color: #666;
+            font-size: 10px;
+            line-height: 1.4;
+        }
+
+        .header-item {
+            background: #fff3cd;
+            padding: 5px;
+            margin: 3px 0;
+            border-radius: 2px;
+            border-left: 2px solid #ffc107;
+            font-family: 'Courier New', monospace;
+            font-size: 10px;
+        }
+
+        .header-key {
+            color: #0c5460;
+            font-weight: 600;
+        }
+
+        .header-value {
+            color: #0c5460;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .page-content {
+            flex: 1;
+            overflow: auto;
+            padding: 20px;
+            background: white;
+        }
+
+        .page-content iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .error-box {
+            background: #ffebee;
+            border-left: 4px solid #f44336;
+            padding: 15px;
+            border-radius: 5px;
+            color: #c62828;
+            margin: 10px;
+        }
+
+        .error-box h3 {
+            margin-bottom: 10px;
+        }
+
+        .error-box p {
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            margin: 5px 0;
+        }
+
+        .status-bar {
+            background: #f5f5f5;
+            padding: 10px 20px;
+            border-top: 1px solid #ddd;
+            font-size: 12px;
+            color: #666;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .status-text {
+            flex: 1;
+        }
+
+        .status-code {
+            font-weight: 600;
+            background: #e3f2fd;
+            padding: 4px 10px;
+            border-radius: 3px;
+            color: #1565c0;
+        }
+
+        .success {
+            color: #2e7d32;
+        }
+
+        .error {
+            color: #c62828;
+        }
+
+        .server-setup-box {
+            background: #f5f5f5;
+            border-left: 4px solid #ff9800;
+            padding: 15px;
+            margin: 15px;
+            border-radius: 5px;
+            font-size: 12px;
+        }
+
+        .server-setup-box h3 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .server-setup-box code {
+            background: white;
+            border: 1px solid #ddd;
+            padding: 10px;
+            display: block;
+            border-radius: 3px;
+            overflow-x: auto;
+            font-size: 11px;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+        }
+
+        .server-setup-box button {
+            background: #ff9800;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 11px;
+        }
+
+        .server-setup-box button:hover {
+            background: #f57c00;
+        }
+
+        .log-section {
+            display: none;
+        }
+
+        .log-section.active {
+            display: block;
+        }
+
+        .log-content {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            font-family: 'Courier New', monospace;
+            font-size: 10px;
+            padding: 10px;
+            border-radius: 3px;
+            max-height: 200px;
+            overflow-y: auto;
+            margin: 0;
+        }
+
+        .log-line {
+            margin: 2px 0;
+            line-height: 1.4;
+        }
+
+        .log-request {
+            color: #569cd6;
+        }
+
+        .log-response {
+            color: #4ec9b0;
+        }
+
+        .log-error {
+            color: #f48771;
+        }
+
+        .log-info {
+            color: #dcdcaa;
+        }
+
+        .content-type-warning {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 10px;
+            margin: 10px;
+            border-radius: 3px;
+            color: #856404;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="browser">
+            <!-- Browser Header/Address Bar -->
+            <div class="browser-header">
+                <div class="address-bar">
+                    <input 
+                        type="text" 
+                        id="urlInput" 
+                        placeholder="Enter URL... (e.g., https://example.com)" 
+                        value="https://example.com"
+                    >
+                    <button id="fetchBtn" onclick="fetchPage()">Fetch as GoogleBot</button>
+                </div>
+                <div class="browser-controls">
+                    <label>
+                        <input type="checkbox" id="showLogs" onchange="toggleLogs()">
+                        Show Request/Response
+                    </label>
+                    <div style="margin-left: auto; display: flex; gap: 15px; align-items: center;">
+                        <select id="corsMethod" style="padding: 6px 10px; border: 1px solid #ddd; border-radius: 3px; font-size: 11px;">
+                            <option value="direct">Direct (No CORS Bypass)</option>
+                            <option value="allorigins">AllOrigins</option>
+                            <option value="textproxy">TextProxies (Fast)</option>
+                            <option value="corsanywhere">CORS Anywhere</option>
+                            <option value="simple-proxy">Simple Proxy</option>
+                            <option value="local-server">Local Backend Server</option>
+                        </select>
+                        <div class="agent-badge">🤖 Googlebot</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content Area -->
+            <div class="browser-content">
+                <div class="browser-main">
+                    <div class="page-content" id="pageContent">
+                        <div style="text-align: center; color: #999; padding: 40px;">
+                            <p>Enter a URL and click "Fetch as GoogleBot" to browse</p>
+                        </div>
+                    </div>
+                    <div class="status-bar">
+                        <span class="status-text" id="statusText">Ready</span>
+                        <span class="status-code" id="statusCode" style="display: none;"></span>
+                    </div>
+                </div>
+
+                <!-- Sidebar with Request/Response Details -->
+                <div class="browser-sidebar">
+                    <div class="sidebar-title">📤 Request Details</div>
+                    <div class="sidebar-content">
+                        <div class="request-details">
+                            <h4>User Agent</h4>
+                            <p id="userAgentDisplay" style="word-break: break-word;">Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)</p>
+                        </div>
+                        <div class="request-details">
+                            <h4>Request Headers</h4>
+                            <div id="requestHeaders"></div>
+                        </div>
+                        <div class="request-details">
+                            <h4>Response Headers</h4>
+                            <div id="responseHeaders"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Verbose Logs Section -->
+            <div id="logsSection" class="log-section">
+                <div class="sidebar-title">🔍 Verbose Log</div>
+                <pre class="log-content" id="logContent"></pre>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // GoogleBot User Agents
+        const GOOGLEBOT_AGENTS = {
+            'desktop': 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)',
+            'mobile': 'Mozilla/5.0 (Linux; Android 6.0.1; Nexus 5X Build/MMB29N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2272.96 Mobile Safari/537.36 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)'
+        };
+
+        const DEFAULT_HEADERS = {
+            'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+            'Accept-Language': 'en-US,en;q=0.5',
+            'Accept-Encoding': 'gzip, deflate, br',
+            'Cache-Control': 'max-age=0',
+            'Referer': 'https://www.google.com/',
+            'Connection': 'keep-alive',
+            'Upgrade-Insecure-Requests': '1'
+        };
+
+        const CORS_PROXIES = {
+            'allorigins': {
+                name: 'AllOrigins',
+                getUrl: (url) => `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`,
+                needsJsonParse: true
+            },
+            'corsanywhere': {
+                name: 'CORS Anywhere (Relay)',
+                getUrl: (url) => `https://cors-anywhere.herokuapp.com/${url}`,
+                needsJsonParse: false
+            },
+            'textproxy': {
+                name: 'TextProxies (Fast)',
+                getUrl: (url) => `https://textproxy.io/?url=${encodeURIComponent(url)}`,
+                needsJsonParse: false
+            },
+            'simple-proxy': {
+                name: 'Simple Proxy',
+                getUrl: (url) => `https://simple-cors-proxy.herokuapp.com/?url=${encodeURIComponent(url)}`,
+                needsJsonParse: false
+            }
+        };
+
+        let requestLog = [];
+
+        function addLog(message, type = 'info') {
+            requestLog.push({ message, type, time: new Date().toLocaleTimeString() });
+            updateLogDisplay();
+        }
+
+        function updateLogDisplay() {
+            const logContent = document.getElementById('logContent');
+            logContent.innerHTML = requestLog
+                .map(entry => {
+                    const className = `log-${entry.type}`;
+                    return `<div class="log-line"><span class="${className}">[${entry.time}] ${entry.message}</span></div>`;
+                })
+                .join('');
+            logContent.scrollTop = logContent.scrollHeight;
+        }
+
+        function toggleLogs() {
+            const logsSection = document.getElementById('logsSection');
+            const showLogs = document.getElementById('showLogs').checked;
+            logsSection.classList.toggle('active', showLogs);
+        }
+
+        function formatUrl(url) {
+            if (!url.startsWith('http://') && !url.startsWith('https://')) {
+                return 'https://' + url;
+            }
+            return url;
+        }
+
+        function getUrlDomain(url) {
+            try {
+                return new URL(url).hostname;
+            } catch (e) {
+                return url;
+            }
+        }
+
+        function showServerSetupGuide() {
+            const pageContent = document.getElementById('pageContent');
+            pageContent.innerHTML = `
+<div class="server-setup-box">
+    <h3>🚀 Setup Local Backend Server</h3>
+    <p>To bypass CORS completely and have full server-side control, run a local Node.js backend:</p>
+    
+    <h4>Step 1: Install Node.js</h4>
+    <p>Download from <a href="https://nodejs.org" target="_blank" style="color: #1976d2;">https://nodejs.org</a></p>
+    
+    <h4>Step 2: Create a new project folder and install dependencies</h4>
+    <code>npm install express axios cors</code>
+    
+    <h4>Step 3: Create server.js file with this code:</h4>
+    <code>const express = require('express');
+const axios = require('axios');
+const cors = require('cors');
+
+const app = express();
+app.use(cors());
+app.use(express.json());
+
+app.get('/fetch', async (req, res) => {
+    try {
+        const url = req.query.url;
+        if (!url) {
+            return res.status(400).json({ error: 'URL parameter required' });
+        }
+
+        const response = await axios.get(url, {
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)',
+                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+                'Accept-Language': 'en-US,en;q=0.5',
+                'Accept-Encoding': 'gzip, deflate',
+                'Referer': 'https://www.google.com/',
+                'Cache-Control': 'max-age=0'
+            },
+            timeout: 10000,
+            maxRedirects: 5
+        });
+
+        // Convert headers to plain object
+        const headersObj = {};
+        response.headers.forEach((value, key) => {
+            headersObj[key] = value;
+        });
+
+        res.json({
+            status: response.status,
+            statusText: response.statusText,
+            headers: headersObj,
+            data: response.data,
+            url: response.config.url
+        });
+    } catch (error) {
+        res.status(500).json({
+            error: error.message,
+            details: error.response?.status || 'No response'
+        });
+    }
+});
+
+const PORT = 3000;
+app.listen(PORT, () => {
+    console.log(\`Server running at http://localhost:\${PORT}\`);
+});
+</code>
+    
+    <h4>Step 4: Run the server</h4>
+    <code>node server.js</code>
+    
+    <h4>Step 5: Use it in this browser</h4>
+    <p>Select "Local Backend Server" from the dropdown and enter URLs to fetch.</p>
+    
+    <button onclick="copyToClipboard()">📋 Copy Server Code</button>
+</div>
+            `;
+        }
+
+        function copyToClipboard() {
+            const serverCode = `const express = require('express');
+const axios = require('axios');
+const cors = require('cors');
+
+const app = express();
+app.use(cors());
+app.use(express.json());
+
+app.get('/fetch', async (req, res) => {
+    try {
+        const url = req.query.url;
+        if (!url) {
+            return res.status(400).json({ error: 'URL parameter required' });
+        }
+
+        const response = await axios.get(url, {
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)',
+                'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+                'Accept-Language': 'en-US,en;q=0.5',
+                'Accept-Encoding': 'gzip, deflate',
+                'Referer': 'https://www.google.com/',
+                'Cache-Control': 'max-age=0'
+            },
+            timeout: 10000,
+            maxRedirects: 5
+        });
+
+        const headersObj = {};
+        response.headers.forEach((value, key) => {
+            headersObj[key] = value;
+        });
+
+        res.json({
+            status: response.status,
+            statusText: response.statusText,
+            headers: headersObj,
+            data: response.data,
+            url: response.config.url
+        });
+    } catch (error) {
+        res.status(500).json({
+            error: error.message,
+            details: error.response?.status || 'No response'
+        });
+    }
+});
+
+const PORT = 3000;
+app.listen(PORT, () => {
+    console.log(\`Server running at http://localhost:\${PORT}\`);
+});`;
+            
+            navigator.clipboard.writeText(serverCode).then(() => {
+                alert('Server code copied to clipboard!');
+            });
+        }
+
+        async function fetchPage() {
+            const urlInput = document.getElementById('urlInput');
+            const corsMethod = document.getElementById('corsMethod').value;
+            let url = formatUrl(urlInput.value.trim());
+
+            if (!url) {
+                alert('Please enter a URL');
+                return;
+            }
+
+            // Show server setup for local-server option
+            if (corsMethod === 'local-server') {
+                showServerSetupGuide();
+                return;
+            }
+
+            requestLog = [];
+            const fetchBtn = document.getElementById('fetchBtn');
+            fetchBtn.disabled = true;
+
+            const pageContent = document.getElementById('pageContent');
+            const statusText = document.getElementById('statusText');
+            const statusCode = document.getElementById('statusCode');
+            const requestHeaders = document.getElementById('requestHeaders');
+            const responseHeaders = document.getElementById('responseHeaders');
+
+            // Show loading state
+            pageContent.innerHTML = '<div class="loading"><div class="spinner"></div><p>Fetching page as GoogleBot...</p></div>';
+            statusText.textContent = 'Loading...';
+            statusCode.style.display = 'none';
+
+            try {
+                addLog(`═══════════════════════════════════════════════════════════`, 'info');
+                addLog(`CORS METHOD: ${corsMethod}`, 'info');
+                addLog(`TARGET URL: ${url}`, 'request');
+                addLog(`═══════════════════════════════════════════════════════════`, 'info');
+                addLog(``, 'info');
+
+                const userAgent = GOOGLEBOT_AGENTS.desktop;
+                const proxyUrl = CORS_PROXIES[corsMethod].getUrl(url);
+                
+                addLog(`User-Agent: ${userAgent}`, 'request');
+                addLog(`Proxy Service: ${CORS_PROXIES[corsMethod].name}`, 'info');
+                addLog(`Proxy URL: ${proxyUrl}`, 'request');
+                
+                // Display request headers in sidebar
+                let headersHTML = '';
+                const allHeaders = { 'User-Agent': userAgent, ...DEFAULT_HEADERS };
+                for (const [key, value] of Object.entries(allHeaders)) {
+                    headersHTML += `<div class="header-item"><span class="header-key">${key}:</span> <span class="header-value">${value}</span></div>`;
+                    addLog(`${key}: ${value}`, 'request');
+                }
+                requestHeaders.innerHTML = headersHTML;
+
+                addLog(``, 'info');
+                addLog(`Sending request via ${CORS_PROXIES[corsMethod].name} proxy...`, 'info');
+
+                let html = '';
+                let responseHeaders_obj = {};
+
+                // Fetch via proxy
+                const proxyResponse = await fetch(proxyUrl, {
+                    headers: {
+                        'User-Agent': userAgent,
+                        ...DEFAULT_HEADERS
+                    }
+                });
+
+                addLog(`Proxy returned status: ${proxyResponse.status}`, 'response');
+
+                if (!proxyResponse.ok) {
+                    throw new Error(`Proxy returned status ${proxyResponse.status}`);
+                }
+
+                const responseData = await proxyResponse.json();
+
+                // Handle different proxy response formats
+                if (CORS_PROXIES[corsMethod].needsJsonParse) {
+                    // AllOrigins format
+                    if (responseData.contents) {
+                        html = responseData.contents;
+                        addLog(`✓ Extracted HTML from AllOrigins response`, 'success');
+                    } else {
+                        throw new Error('AllOrigins response missing "contents" field');
+                    }
+                } else {
+                    // Direct HTML response
+                    html = typeof responseData === 'string' ? responseData : JSON.stringify(responseData);
+                }
+
+                addLog(``, 'info');
+                addLog(`◀ RESPONSE RECEIVED`, 'response');
+                addLog(`═══════════════════════════════════════════════════════════`, 'info');
+                addLog(`HTTP/1.1 200 OK`, 'response');
+                addLog(`Content-Type: text/html`, 'response');
+                addLog(`Content-Length: ${html.length}`, 'response');
+
+                responseHeaders.innerHTML = `<div style="color: #999;">Response from proxy service</div>`;
+
+                // Update status
+                statusCode.textContent = `HTTP 200`;
+                statusCode.style.display = 'inline-block';
+                statusCode.className = 'status-code success';
+
+                addLog(``, 'info');
+                addLog(`✓ PAGE LOADED SUCCESSFULLY`, 'response');
+                addLog(`✓ Response size: ${html.length} bytes`, 'response');
+                addLog(`═══════════════════════════════════════════════════════════`, 'response');
+
+                // Create a sandboxed iframe to display the content
+                pageContent.innerHTML = '';
+                const iframe = document.createElement('iframe');
+                iframe.style.width = '100%';
+                iframe.style.height = '100%';
+                iframe.style.border = 'none';
+                
+                const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                iframeDoc.open();
+                iframeDoc.write(html);
+                iframeDoc.close();
+                
+                pageContent.appendChild(iframe);
+                statusText.textContent = `Loaded: ${getUrlDomain(url)} (via ${CORS_PROXIES[corsMethod].name})`;
+
+            } catch (error) {
+                addLog(`✗ ERROR: ${error.name}`, 'error');
+                addLog(`✗ Message: ${error.message}`, 'error');
+                addLog(`═══════════════════════════════════════════════════════════`, 'error');
+                
+                pageContent.innerHTML = `<div class="error-box">
+                    <h3>Request Failed</h3>
+                    <p><strong>Error:</strong> ${error.message}</p>
+                    <p><strong>Proxy Method:</strong> ${CORS_PROXIES[corsMethod].name}</p>
+                    <p><strong>Troubleshooting Steps:</strong></p>
+                    <ul style="margin-left: 20px; margin-top: 10px;">
+                        <li><strong>Try another proxy:</strong> Different proxies have different success rates</li>
+                        <li><strong>Website blocking:</strong> The target site may block proxy services</li>
+                        <li><strong>Proxy down:</strong> Free proxy services sometimes go down - try after a few minutes</li>
+                        <li><strong>Rate limited:</strong> Public proxies have usage limits</li>
+                        <li><strong>Best solution:</strong> Set up "Local Backend Server" for guaranteed access</li>
+                    </ul>
+                </div>`;
+                statusText.textContent = `Error: ${error.message}`;
+                statusCode.textContent = 'ERROR';
+                statusCode.style.display = 'inline-block';
+                statusCode.className = 'status-code error';
+            } finally {
+                fetchBtn.disabled = false;
+            }
+        }
+
+        // Allow Enter key to trigger fetch
+        document.getElementById('urlInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                fetchPage();
+            }
+        });
+    </script>
+</body>
+</html>
