@@ -723,7 +723,8 @@ CONCEPTS COVERED:
                         date: article.date,
                         fullContent: article.fullContent,
                         isMarkdown: true,
-                        fileName: article.fileName
+                        fileName: article.fileName,
+                        imageUrl: getArticleImage(article.title, article.category)
                     }));
                     
                     /* Merge with base stories (markdown articles first) */
@@ -799,7 +800,6 @@ CONCEPTS COVERED:
                 source: fileName.replace('.md', '').replace(/_/g, ' '),
                 date: date,
                 emoji: getCategoryEmoji(category),
-                imageUrl: getArticleImage(title, category),
                 fullContent: content,
                 isMarkdown: true
             };
