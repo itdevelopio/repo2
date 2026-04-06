@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Good News Daily - Positive Stories</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 50px;
+            animation: slideDown 0.8s ease-out;
+        }
+
+        header h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        header p {
+            font-size: 18px;
+            opacity: 0.95;
+            font-weight: 300;
+        }
+
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 50px;
+        }
+
+        .news-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            animation: fadeInUp 0.6s ease-out backwards;
+            cursor: pointer;
+            border: 2px solid transparent;
+        }
+
+        .news-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.2);
+            border-color: #667eea;
+        }
+
+        .news-image {
+            width: 100%;
+            height: 220px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 80px;
+        }
+
+        .news-content {
+            padding: 24px;
+        }
+
+        .news-category {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .news-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+
+        .news-description {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+
+        .news-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            color: #999;
+        }
+
+        .news-date {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .news-source {
+            background: #f0f0f0;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px 20px;
+            color: white;
+        }
+
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .end-message {
+            text-align: center;
+            color: white;
+            padding: 40px 20px;
+            font-size: 18px;
+            margin-top: 40px;
+        }
+
+        .emoji {
+            font-size: 32px;
+            margin-right: 10px;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 36px;
+            }
+
+            .news-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            header {
+                margin-bottom: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>✨ Good News Daily</h1>
+            <p>Scroll down for more positive stories that restore faith in humanity</p>
+        </header>
+
+        <div class="news-grid" id="newsGrid"></div>
+
+        <div class="loading" id="loadingIndicator" style="display: none;">
+            <div class="spinner"></div>
+            <p>Loading more good news...</p>
+        </div>
+
+        <div class="end-message" id="endMessage" style="display: none;">
+            <span class="emoji">🌟</span>
+            <p>You've reached the end for now. Check back tomorrow for more good news!</p>
+        </div>
+    </div>
+
+    <script>
+        // ========================================================================
+        // GOOD NEWS PAGE - INFINITE SCROLL IMPLEMENTATION
+        // ========================================================================
+        
+        // Database of good news stories
+        const goodNewsData = [
+            {
+                emoji: "🌍",
+                category: "Environment",
+                title: "Global Tree Planting Initiative Surpasses 15 Billion Trees",
+                description: "A worldwide effort to combat climate change has successfully planted over 15 billion trees, creating millions of jobs and improving air quality across continents.",
+                source: "GreenEarth News",
+                date: "Today"
+            },
+            {
+                emoji: "🏥",
+                category: "Health",
+                title: "New Cancer Treatment Shows 90% Remission Rate",
+                description: "Scientists have developed a breakthrough immunotherapy that cures cancer in 9 out of 10 patients, offering hope to millions worldwide.",
+                source: "Medical Today",
+                date: "Yesterday"
+            },
+            {
+                emoji: "🎓",
+                category: "Education",
+                title: "Free Online Education Reaches 500 Million Students",
+                description: "Educational platforms are now providing quality learning opportunities to students in developing countries, closing the education gap.",
+                source: "Learning Hub",
+                date: "2 days ago"
+            },
+            {
+                emoji: "🚀",
+                category: "Technology",
+                title: "Clean Energy Now Provides 50% of Global Power",
+                description: "Renewable energy sources have reached a milestone, now generating half of the world's electricity and continuing to grow.",
+                source: "TechTimes",
+                date: "3 days ago"
+            },
+            {
+                emoji: "🤝",
+                category: "Community",
+                title: "Volunteers Build 1,000 Homes for Homeless Families",
+                description: "A global initiative has provided stable homes to over 1,000 families, offering them hope and dignity for a fresh start.",
+                source: "Community Weekly",
+                date: "4 days ago"
+            },
+            {
+                emoji: "🐼",
+                category: "Wildlife",
+                title: "Endangered Species Population Doubles in 5 Years",
+                description: "Conservation efforts have successfully increased the population of several endangered species, marking a major victory for biodiversity.",
+                source: "Nature Today",
+                date: "5 days ago"
+            },
+            {
+                emoji: "💚",
+                category: "Social Good",
+                title: "Child Poverty Rates Drop by 40% Globally",
+                description: "International cooperation and local initiatives have dramatically reduced child poverty, improving millions of lives.",
+                source: "Good News Network",
+                date: "6 days ago"
+            },
+            {
+                emoji: "🔬",
+                category: "Science",
+                title: "Alzheimer's Vaccine Enters Final Testing Phase",
+                description: "A promising vaccine for Alzheimer's disease is showing remarkable results in clinical trials, with potential to prevent the disease.",
+                source: "Science Daily",
+                date: "1 week ago"
+            },
+            {
+                emoji: "🌱",
+                category: "Agriculture",
+                title: "Vertical Farming Ends Food Scarcity in African Cities",
+                description: "Innovation in urban farming has brought fresh produce to food-insecure areas, creating jobs and improving nutrition.",
+                source: "Agri-News",
+                date: "1 week ago"
+            },
+            {
+                emoji: "🎵",
+                category: "Culture",
+                title: "Young Artists Win Global Recognition and Support",
+                description: "Emerging talents from around the world are receiving unprecedented support and platforms to share their creativity.",
+                source: "Arts Weekly",
+                date: "8 days ago"
+            },
+            {
+                emoji: "⚽",
+                category: "Sports",
+                title: "Sports Unite Communities, Reduce Crime Rates",
+                description: "Community sports programs are bringing people together, reducing youth crime by 35% in participating neighborhoods.",
+                source: "Sports Life",
+                date: "9 days ago"
+            },
+            {
+                emoji: "🏃‍♀️",
+                category: "Health",
+                title: "Life Expectancy Reaches All-Time High",
+                description: "Global life expectancy has increased to 73 years, with healthcare improvements benefiting people in all regions.",
+                source: "Health News Daily",
+                date: "10 days ago"
+            },
+            {
+                emoji: "🌊",
+                category: "Environment",
+                title: "Ocean Cleanup Technology Removes Millions of Tons of Plastic",
+                description: "Advanced technology is successfully clearing plastic from oceans, restoring marine ecosystems and protecting wildlife.",
+                source: "Eco Times",
+                date: "11 days ago"
+            },
+            {
+                emoji: "👩‍💼",
+                category: "Economy",
+                title: "Women Entrepreneurs Create 5 Million New Jobs",
+                description: "Female business leaders are driving economic growth and creating employment opportunities in emerging markets.",
+                source: "Business World",
+                date: "12 days ago"
+            },
+            {
+                emoji: "🎁",
+                category: "Social",
+                title: "Global Charity Breaks Records with $100 Billion Raised",
+                description: "Record-breaking donations are helping organizations tackle poverty, disease, and inequality worldwide.",
+                source: "Giving News",
+                date: "13 days ago"
+            },
+            {
+                emoji: "🏡",
+                category: "Housing",
+                title: "Affordable Housing Initiative Shelters 2 Million People",
+                description: "A coordinated effort has provided safe, affordable homes to millions, transforming communities worldwide.",
+                source: "Housing Today",
+                date: "14 days ago"
+            },
+            {
+                emoji: "💡",
+                category: "Innovation",
+                title: "Breakthrough Battery Technology Lasts 20+ Years",
+                description: "New battery innovation promises to last decades, revolutionizing electric vehicles and renewable energy storage.",
+                source: "Innovation Hub",
+                date: "15 days ago"
+            },
+            {
+                emoji: "🌈",
+                category: "Equality",
+                title: "Gender Equality Legislation Passes in 100+ Countries",
+                description: "International movement ensures equal rights and opportunities for all, marking unprecedented progress for equality.",
+                source: "Rights Watch",
+                date: "16 days ago"
+            },
+            {
+                emoji: "🎓",
+                category: "Education",
+                title: "Literacy Rate Reaches 90% Globally",
+                description: "Global literacy initiatives have nearly eliminated illiteracy, empowering billions to read, write, and learn.",
+                source: "Education News",
+                date: "17 days ago"
+            },
+            {
+                emoji: "🌍",
+                category: "Peace",
+                title: "Historic Peace Treaty Ends Regional Conflict",
+                description: "Former adversaries sign landmark peace agreement, opening doors for cooperation and mutual development.",
+                source: "Peace Today",
+                date: "18 days ago"
+            }
+        ];
+
+        // ========================================================================
+        // INFINITE SCROLL LOGIC
+        // ========================================================================
+
+        let currentIndex = 0;
+        const itemsPerLoad = 6;
+        let isLoading = false;
+        let hasMoreItems = true;
+
+        const newsGrid = document.getElementById('newsGrid');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+        const endMessage = document.getElementById('endMessage');
+
+        // Create a news card element
+        function createNewsCard(newsItem, delay) {
+            const card = document.createElement('div');
+            card.className = 'news-card';
+            card.style.animationDelay = `${delay * 0.1}s`;
+            card.innerHTML = `
+                <div class="news-image">${newsItem.emoji}</div>
+                <div class="news-content">
+                    <div class="news-category">${newsItem.category}</div>
+                    <h3 class="news-title">${newsItem.title}</h3>
+                    <p class="news-description">${newsItem.description}</p>
+                    <div class="news-meta">
+                        <span class="news-date">📅 ${newsItem.date}</span>
+                        <span class="news-source">${newsItem.source}</span>
+                    </div>
+                </div>
+            `;
+            return card;
+        }
+
+        // Load more news items
+        function loadMoreNews() {
+            if (isLoading || !hasMoreItems) return;
+
+            isLoading = true;
+            loadingIndicator.style.display = 'block';
+
+            // Simulate network delay (optional)
+            setTimeout(() => {
+                const itemsToAdd = goodNewsData.slice(
+                    currentIndex,
+                    currentIndex + itemsPerLoad
+                );
+
+                itemsToAdd.forEach((newsItem, index) => {
+                    const card = createNewsCard(newsItem, index);
+                    newsGrid.appendChild(card);
+                });
+
+                currentIndex += itemsPerLoad;
+
+                // Check if we've reached the end
+                if (currentIndex >= goodNewsData.length) {
+                    hasMoreItems = false;
+                    endMessage.style.display = 'block';
+                }
+
+                isLoading = false;
+                loadingIndicator.style.display = 'none';
+            }, 800);
+        }
+
+        // Detect when user scrolls near the bottom
+        window.addEventListener('scroll', () => {
+            // Calculate scroll position
+            const scrollPosition = window.innerHeight + window.scrollY;
+            const pageHeight = document.documentElement.scrollHeight;
+
+            // Load more when user is within 500px of the bottom
+            if (scrollPosition >= pageHeight - 500 && !isLoading && hasMoreItems) {
+                loadMoreNews();
+            }
+        });
+
+        // Initial load
+        loadMoreNews();
+    </script>
+</body>
+</html>
