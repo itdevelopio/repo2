@@ -611,88 +611,8 @@ CONCEPTS COVERED:
         - source: Publication name
         - date: When published
         */
-        const baseStories = [
-            {
-                emoji: "🌍",
-                category: "Environment",
-                title: "Global Tree Planting Initiative Surpasses 15 Billion Trees",
-                description: "In a landmark achievement for environmental restoration, a coordinated worldwide effort to combat climate change and deforestation has successfully planted over 15 billion trees across all continents. The initiative, which began seven years ago with ambitious goals, has created millions of sustainable jobs in rural communities, improved air quality measurably in major cities, and restored ecosystems in previously degraded regions. Scientists report that the carbon sequestration potential of these planted forests could offset billions of tons of carbon dioxide over the coming decades. Indigenous communities have played a crucial role in the project, combining traditional ecological knowledge with modern conservation techniques to ensure the long-term survival and health of the restored forests.",
-                source: "GreenEarth News",
-                date: "Today"
-            },
-            {
-                emoji: "🏥",
-                category: "Health",
-                title: "New Cancer Treatment Shows 90% Remission Rate in Breakthrough Study",
-                description: "Researchers from leading medical institutions worldwide have unveiled a revolutionary immunotherapy treatment that achieves a 90% remission rate in previously incurable cancer cases. The groundbreaking therapy harnesses the patient's own immune system to target and eliminate cancer cells with unprecedented precision. Clinical trials involving thousands of patients across multiple continents have demonstrated dramatic improvements in survival rates and quality of life. The treatment works by training immune cells to recognize and destroy cancerous growths while leaving healthy tissue unharmed. With affordability improvements already underway, this discovery offers genuine hope to the millions of cancer patients worldwide who had previously faced limited treatment options. Medical experts are calling it one of the most significant breakthroughs in oncology of the past two decades.",
-                source: "Medical Today",
-                date: "Yesterday"
-            },
-            {
-                emoji: "🎓",
-                category: "Education",
-                title: "Free Online Education Reaches 500 Million Students Worldwide",
-                description: "In a transformative moment for global education, major online learning platforms have successfully provided high-quality educational content to over 500 million students across developing nations. The initiative addresses the critical global challenge of educational inequality, ensuring that students in remote villages and poor urban neighborhoods now have access to the same learning resources as those in wealthy countries. Teachers in underserved regions report that their students are achieving significantly higher test scores and demonstrating greater confidence in their academic abilities. The program has introduced curriculum in over 150 languages, making quality education genuinely accessible to marginalized communities. Universities from developed nations have partnered to create locally-relevant content while maintaining world-class standards. Experts predict that within a generation, this educational democratization will produce skilled professionals from populations previously cut off from opportunity.",
-                source: "Learning Hub",
-                date: "2 days ago"
-            },
-            {
-                emoji: "🚀",
-                category: "Technology",
-                title: "Clean Energy Now Provides 50% of Global Electricity Supply",
-                description: "A historic milestone has been reached as renewable energy sources including solar, wind, and hydroelectric power now generate 50% of the world's electricity. This unprecedented achievement represents a fundamental shift in global energy production and marks a turning point in humanity's fight against climate change. Technological advancements in solar efficiency and battery storage have made clean energy not just environmentally necessary but economically competitive with fossil fuels. Developing nations are particularly benefiting from the declining costs of renewable technology, allowing them to build modern energy infrastructure without the stranded assets of outdated coal and oil dependence. Industry experts report that clean energy investments have created more jobs than the entire fossil fuel industry previously employed. The momentum continues to accelerate, with projections suggesting 70% renewable electricity by 2030.",
-                source: "TechTimes",
-                date: "3 days ago"
-            },
-            {
-                emoji: "🤝",
-                category: "Community",
-                title: "Global Volunteer Movement Builds 1,000 Homes for Families in Need",
-                description: "An inspiring international coalition of volunteers, corporations, and nonprofits has successfully constructed over 1,000 dignified homes for families experiencing homelessness. The massive undertaking coordinated efforts across dozens of countries, mobilizing over 100,000 volunteer work hours and demonstrating the power of collective action. Each home, built using sustainable materials and modern construction techniques, provides not just shelter but a foundation for transformed lives. Participating families report dramatic improvements in children's school attendance, adult employment prospects, and overall mental health since obtaining stable housing. The project has also revitalized struggling neighborhoods, creating community gardens, playgrounds, and gathering spaces alongside the homes. Organizations involved report that the increased stability allows families to address health issues, pursue education, and contribute more fully to their communities.",
-                source: "Community Weekly",
-                date: "4 days ago"
-            },
-            {
-                emoji: "🐼",
-                category: "Wildlife",
-                title: "Endangered Species Population Doubles Following Five-Year Conservation Effort",
-                description: "One of the most uplifting environmental success stories in recent memory unfolded this week as populations of several critically endangered species have doubled over the past five years. Coordinated international conservation efforts have created protected habitats, reduced poaching through indigenous ranger programs, and implemented DNA-based monitoring systems to track recovery. The achievement encompasses species from diverse ecosystems including giant pandas, African elephants, Indian tigers, and numerous bird and amphibian species. Scientists attribute the success to combining legal protections with economic incentives for local communities to preserve wildlife habitats. The recovery demonstrates that extinction is not inevitable when sufficient resources and political will are committed to conservation. Conservation organizations are expanding successful programs to protect hundreds of additional species currently facing extinction threats.",
-                source: "Nature Today",
-                date: "5 days ago"
-            },
-            {
-                emoji: "💚",
-                category: "Social Good",
-                title: "Child Poverty Rates Decline by 40% in Global Achievement",
-                description: "In perhaps the most significant victory for global social progress in decades, international development organizations report that child poverty rates have dropped by 40% globally over the past ten years. This extraordinary improvement reflects coordinated efforts in education access, healthcare provision, and economic opportunity creation across developing nations. Millions of children who previously worked in hazardous conditions or missed school due to poverty now attend classes regularly and have prospects for better futures. The improvement is particularly pronounced in sub-Saharan Africa and Southeast Asia, where targeted interventions have proven remarkably effective. Programs combining microfinance, education subsidies, and healthcare access have created sustainable pathways out of poverty. Child labor has declined dramatically, with millions of children now able to pursue education instead of working to support their families. Development experts attribute success to both increased international aid and improved governance in recipient nations.",
-                source: "Good News Network",
-                date: "6 days ago"
-            },
-            {
-                emoji: "🔬",
-                category: "Science",
-                title: "Alzheimer's Vaccine Enters Critical Final Testing Phase with Stunning Results",
-                description: "A groundbreaking vaccine targeting Alzheimer's disease has advanced into final human clinical trials after demonstrating remarkable effectiveness in preventing cognitive decline. The therapeutic vaccine works by training the immune system to target amyloid-beta proteins that accumulate in the brains of Alzheimer's patients. Preliminary trials show that people receiving the vaccine maintain cognitive function while untreated patients in comparison groups experienced measurable mental decline. If successful in final trials, the vaccine could prevent the development of Alzheimer's disease in millions of people worldwide, rather than simply treating symptoms after brain damage occurs. The discovery represents a fundamental shift from managing disease to preventing it entirely. With over 150 million people projected to suffer from Alzheimer's by 2050, this preventive approach could spare hundreds of millions from this devastating illness.",
-                source: "Science Daily",
-                date: "1 week ago"
-            },
-            {
-                emoji: "🌱",
-                category: "Agriculture",
-                title: "Vertical Farming Revolution Ends Food Scarcity in Urban African Centers",
-                description: "An agricultural innovation reshaping food security in Africa has emerged as vertical farming systems transform vacant urban spaces into productive food production centers. Modern hydroponic and aeroponic systems allow African cities to grow fresh vegetables, fruits, and grains year-round regardless of climate conditions, while using 95% less water than traditional agriculture. The technology has moved from experimental installations to commercial operations providing consistent supplies of affordable fresh produce to formerly food-insecure neighborhoods. Young entrepreneurs, particularly women, are establishing themselves as vertical farm operators, creating economic opportunities in economically disadvantaged communities. The localized production model dramatically reduces transportation costs and environmental impact compared to importing food across continents. Nutritional improvements in communities adopting vertical-farmed produce have been documented, with reduced malnutrition and improved health outcomes. The proven model is rapidly expanding to other continents.",
-                source: "Agri-News",
-                date: "1 week ago"
-            },
-            {
-                emoji: "🎵",
-                category: "Culture",
-                title: "Young Artists from Around Globe Win International Recognition and Career Support",
-                description: "A newly established global arts initiative has identified and provided substantial support to thousands of young artists from disadvantaged backgrounds, launching previously undiscovered talent onto the international stage. The program recognizes that artistic genius exists everywhere but only becomes visible when resources and platforms are provided to develop and showcase it. Young musicians, visual artists, dancers, and writers from rural regions, refugee camps, and low-income neighborhoods have been connected with mentors, performance opportunities, and financial support to pursue their crafts. International audiences are discovering remarkable artists whose perspectives and styles reflect unique cultural backgrounds and lived experiences. Record galleries have funded exhibitions by previously unknown artists who now command significant recognition and sales. The initiative demonstrates that talent is universally distributed while opportunity has been historically concentrated, and that addressing that disparity unleashes extraordinary human creativity.",
-                source: "Arts Weekly",
-                date: "8 days ago"
-            }
-        ];
+        /* Mock articles removed - displaying only markdown articles from .md files */
+        const baseStories = [];  // Empty array - articles come from .md files only
 
         /*
         ====================================================================
@@ -733,7 +653,7 @@ CONCEPTS COVERED:
                 
                 if (!response.ok) {
                     console.warn('Could not fetch markdown files from GitHub');
-                    allStories = baseStories;
+                    allStories = [];  /* No articles to display */
                     return false;
                 }
                 
@@ -744,7 +664,7 @@ CONCEPTS COVERED:
                 
                 if (mdFiles.length === 0) {
                     console.warn('No markdown files found in GitHub');
-                    allStories = baseStories;
+                    allStories = [];  /* No articles to display */
                     return false;
                 }
                 
@@ -799,12 +719,12 @@ CONCEPTS COVERED:
                     }));
                     
                     /* Merge with base stories (markdown articles first) */
-                    allStories = markdownArticles.concat(baseStories);
+                    allStories = markdownArticles;  /* Only show markdown articles */
                     console.log(`✓ Loaded ${markdownArticles.length} markdown articles from GitHub`);
                     return true;
                 } else {
                     console.warn('No valid articles found');
-                    allStories = baseStories;
+                    allStories = [];  /* No articles to display */
                     return false;
                 }
             } catch (error) {
@@ -813,7 +733,7 @@ CONCEPTS COVERED:
                 */
                 console.warn('Could not load markdown articles from GitHub.');
                 console.log('Error:', error.message);
-                allStories = baseStories;
+                allStories = [];  /* No articles to display */
                 return false;
             }
         }
@@ -900,8 +820,8 @@ CONCEPTS COVERED:
             return emojiMap['Default'];
         }
         
-        /* Will be populated with base stories + markdown articles */
-        let allStories = baseStories;
+        /* Will be populated with markdown articles from .md files */
+        let allStories = [];
 
         /*
         ====================================================================
@@ -1188,44 +1108,28 @@ CONCEPTS COVERED:
             loadingIndicator.style.display = 'block';
 
             /*
-            setTimeout delays code execution - simulates network/server delay
-            In a real app, this would be an API call to fetch from server
-            Here we use 800ms for visual polish/user feedback
-            The function inside runs AFTER 800ms
+            setTimeout delays code execution for visual polish
+            Since we only have markdown articles (no infinite generation),
+            we just hide the loading indicator
             */
             setTimeout(() => {
-                /*
-                GENERATE NEW STORIES
-                Remember where we are (what index) before adding new stories
+                /* 
+                With only markdown articles, there are no more articles to load
+                Just hide the loading indicator
                 */
-                const startIndex = goodNewsData.length;  /* Next article index */
-                /* Loop 6 times, generating each story */
-                for (let i = 0; i < itemsPerLoad; i++) {
-                    /*
-                    Call getStory() with sequential index (startIndex, startIndex+1, etc)
-                    Each story is unique due to modulo math inside getStory()
-                    */
-                    goodNewsData.push(getStory(startIndex + i));
-                }
-
-                /*
-                DISPLAY THE NEWLY GENERATED ARTICLES
-                slice(start, end) gets items between startIndex and startIndex+6
-                forEach cycles through each story and converts to visual card
-                */
-                goodNewsData.slice(startIndex, startIndex + itemsPerLoad).forEach((newsItem, index) => {
-                    /* Convert story object to HTML element */
-                    const card = createNewsCard(newsItem, index);
-                    /* Add element to page (appendChild adds as last child) */
-                    newsGrid.appendChild(card);
-                });
-
-                /* Update counter for next batch */
-                currentIndex += itemsPerLoad;
-
-                /* Hide the loading indicator */
                 isLoading = false;
                 loadingIndicator.style.display = 'none';
+                
+                /* Optional: Show a message that there are no more articles */
+                if (goodNewsData.length > 0 && newsGrid.children.length === goodNewsData.length) {
+                    const endMessage = document.createElement('div');
+                    endMessage.style.textAlign = 'center';
+                    endMessage.style.padding = '40px 20px';
+                    endMessage.style.color = '#999';
+                    endMessage.style.fontSize = '16px';
+                    endMessage.innerHTML = '✨ You\'ve reached the end of all articles ✨';
+                    newsGrid.appendChild(endMessage);
+                }
             }, 800);
         }
 
@@ -1313,25 +1217,32 @@ CONCEPTS COVERED:
         
         /*
         LOAD MARKDOWN ARTICLES FIRST
-        Fetch articles from backend server before displaying
-        This ensures markdown articles appear first on the page
-        Then mock news is loaded after when user scrolls
+        Fetch articles from GitHub before displaying
+        This loads all markdown articles from the news_articles folder
         */
         loadMarkdownArticles().then(() => {
-            /* Initialize goodNewsData with ONLY markdown articles first */
+            /* Initialize goodNewsData with markdown articles */
             goodNewsData = [];  /* Reset data array */
             
             /* Add all markdown articles to the display */
             if (markdownArticles && markdownArticles.length > 0) {
                 goodNewsData = [...markdownArticles];
-                console.log(`✓ Displaying ${markdownArticles.length} markdown articles first`);
+                console.log(`✓ Displaying ${markdownArticles.length} markdown articles`);
+                
+                /* Display all articles on page load */
+                goodNewsData.forEach((newsItem, index) => {
+                    const card = createNewsCard(newsItem, index);
+                    newsGrid.appendChild(card);
+                });
+            } else {
+                /* No articles to display */
+                const noArticlesMsg = document.createElement('div');
+                noArticlesMsg.style.textAlign = 'center';
+                noArticlesMsg.style.padding = '40px 20px';
+                noArticlesMsg.style.color = '#999';
+                noArticlesMsg.innerHTML = '📭 No articles found';
+                newsGrid.appendChild(noArticlesMsg);
             }
-            
-            /* Display the markdown articles immediately */
-            loadMoreNews();
-            
-            /* Now when user scrolls, mock news will be generated after the markdown articles */
-            /* currentIndex tracks position in allStories */
         });
     </script>
 </body>
