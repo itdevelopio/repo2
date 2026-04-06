@@ -828,26 +828,20 @@ CONCEPTS COVERED:
             /* Generate a unique seed from the article title for unique illustrations */
             let seed = title.toLowerCase().replace(/[^a-z0-9]/g, '');
             
-            /* Use DiceBear API with title-based seed to generate unique illustrations */
-            /* Multiple avatar styles for maximum visual variety */
-            const styles = [
-                'adventurer-neutral',
-                'avataaars-neutral',
-                'notionists-neutral',
-                'bottts-neutral',
-                'croodles-neutral'
-            ];
+            /* Use Boring Avatars API which generates highly distinct visual designs */
+            /* Multiple varieties create completely different visual styles */
+            const varieties = ['bauhaus', 'ring', 'sunset', 'marble', 'beam', 'pixel'];
             
-            /* Select different style based on the seed itself to maximize visual variety */
-            /* Use character codes of first letters to determine style index */
-            let styleIndex = 0;
+            /* Select different style variety based on the seed itself */
+            let varietyIndex = 0;
             if (seed.length > 0) {
-                styleIndex = seed.charCodeAt(0) % styles.length;
+                varietyIndex = seed.charCodeAt(0) % varieties.length;
             }
             
-            const style = styles[styleIndex];
+            const variety = varieties[varietyIndex];
             
-            return `https://api.dicebear.com/7.x/${style}/svg?seed=${seed}&scale=150`;
+            /* Boring Avatars creates colorful, abstract, & SVG-based designs */
+            return `https://api.dicebear.com/7.x/boring-avatars/svg?seed=${seed}&variant=${variety}&scale=200`;
         }
         
         /* Will be populated with markdown articles from .md files */
