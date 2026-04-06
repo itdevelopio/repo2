@@ -52,6 +52,19 @@ The science of social connection offers one of the most hopeful messages in mode
 
 ---
 
+## Key Concepts at a Glance
+
+| Concept | What It Means | Why It Matters |
+|---------|--------------|----------------|
+| **Relationship quality** | The depth, trust, and mutual responsiveness in close personal relationships | A stronger predictor of long-term health and happiness than wealth, fame, or even cholesterol levels |
+| **Loneliness epidemic** | The widespread prevalence of social isolation in modern society, classified as a public health crisis | Chronic loneliness has health impacts comparable to smoking 15 cigarettes per day and is a major risk factor for depression and early death |
+| **Oxytocin** | A neuropeptide released during positive social interactions that reduces cortisol and activates feelings of safety | The biological mechanism linking human connection to reduced stress and improved mental health |
+| **Social prescribing** | A healthcare model where doctors prescribe social activities (e.g., joining a choir, volunteering) as mental health treatment | Reduces antidepressant prescriptions and GP visits by addressing the social root causes of poor mental health |
+| **Responsiveness** | Making another person feel genuinely understood, validated, and cared for in an interaction | The single most important driver of relationship satisfaction and bond quality |
+| **Depth over breadth** | Prioritizing a few close, trusting relationships over a large network of shallow connections | Deep bonds offer the greatest protection against depression, anxiety, and premature mortality |
+
+---
+
 ## Sources
 
 1. **Waldinger, R. J., & Schulz, M. S. (2023).** *The Good Life: Lessons from the World's Longest Scientific Study of Happiness.* Simon & Schuster. https://www.goodlifeproject.com

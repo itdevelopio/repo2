@@ -48,6 +48,19 @@ That makes today's psychology news relevant not only to mental health specialist
 
 ---
 
+## Key Concepts at a Glance
+
+| Concept | What It Means | Why It Matters |
+|---------|--------------|----------------|
+| **Validation gap** | The lag between widespread AI deployment and the scientific evidence needed to confirm its safety and effectiveness | Millions of vulnerable users are exposed to unvalidated tools before risks are fully understood |
+| **Emotional dependence** | Over-reliance on an AI system for emotional support, replacing human relationships and professional care | Can discourage people from seeking qualified help and reshape attachment patterns in harmful ways |
+| **Escalation protocol** | An automatic process by which an AI detects crisis language and directs users to human professionals or emergency services | Protects users in life-threatening moments when algorithm-based responses are insufficient |
+| **Liability gap** | The absence of clear legal frameworks assigning responsibility when AI mental health tools cause harm | Creates accountability vacuums that leave harmed users without recourse or protection |
+| **Two-tier mental health system** | A scenario where wealthier populations access professional care while lower-income groups rely on unvalidated AI by default | Risks deepening existing inequalities in mental health outcomes |
+| **Transparency & consent** | Users knowing they are interacting with an algorithm and explicitly agreeing to share sensitive information with it | Ensures informed decision-making and respects user autonomy and dignity |
+
+---
+
 ## Sources
 
 1. **World Health Organization (2023).** "Generative AI and mental health." Published guidance on AI deployment in mental health contexts. Available at: https://www.who.int

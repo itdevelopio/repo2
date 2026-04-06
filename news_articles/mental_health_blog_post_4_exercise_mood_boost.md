@@ -43,6 +43,19 @@ For individuals, the practical message is empowering: improving your mental heal
 
 ---
 
+## Key Concepts at a Glance
+
+| Concept | What It Means | Why It Matters |
+|---------|--------------|----------------|
+| **Neurogenesis** | The growth of new brain cells, particularly in the hippocampus, stimulated by aerobic exercise | Builds stress resilience and improves emotional regulation at a biological level |
+| **Endorphins & neurotransmitters** | Brain chemicals (dopamine, serotonin, norepinephrine) released during exercise that elevate mood | The same chemicals modulated by antidepressants, making exercise a natural pharmaceutical-equivalent |
+| **Exercise as medicine** | The formal clinical concept of prescribing structured physical activity as a treatment for mental health conditions | Now endorsed by WHO, NICE, and APA as a first- or second-line treatment for mild-to-moderate depression |
+| **Aerobic exercise** | Sustained cardiovascular activity (running, cycling, swimming) at moderate intensity | Produces the most consistent antidepressant effects; 30–45 minutes, 3–5 times per week is the evidence-based dose |
+| **Behavioral activation** | A psychological technique of starting with tiny, manageable steps (e.g., a 5-minute walk) to break the inertia of depression | Helps depressed individuals begin exercise despite low motivation by lowering the initial barrier |
+| **Social exercise benefit** | The mental health multiplier effect when exercise is done in a group or community setting | Simultaneously addresses physical inactivity and loneliness, two of the biggest risk factors for poor mental health |
+
+---
+
 ## Sources
 
 1. **Noetel, M., Sanders, T., Gallardo-Gómez, D., et al. (2024).** "Effect of exercise for depression: systematic review and network meta-analysis of randomised controlled trials." *BMJ*, 384, e075847. https://doi.org/10.1136/bmj-2023-075847

@@ -60,6 +60,19 @@ The research offers a beautifully simple prescription for an increasingly comple
 
 ---
 
+## Key Concepts at a Glance
+
+| Concept | What It Means | Why It Matters |
+|---------|--------------|----------------|
+| **Attention Restoration Theory (ART)** | The idea that natural environments restore depleted attentional resources through effortless "soft fascination" | Explains why time in nature improves focus and cognitive performance after mentally demanding work |
+| **Stress Reduction Theory** | The theory that natural settings trigger an evolutionarily adaptive relaxation response, lowering cortisol, blood pressure, and heart rate | Provides the physiological mechanism behind nature's near-instant calming effects—measurable within 5 minutes |
+| **Shinrin-yoku (forest bathing)** | The Japanese practice of leisurely immersion in a forest environment as a therapeutic activity | Clinically validated to reduce cortisol, boost immune function, and decrease anxiety and depression scores |
+| **Green social prescribing** | A healthcare model connecting patients to nature-based activities (gardening, conservation volunteering, nature walks) as mental health treatment | NHS pilots show improved well-being, reduced GP visits, and engagement from people who struggle with conventional clinical services |
+| **120-minute nature threshold** | The minimum weekly time in natural environments associated with significantly better well-being and health | Research on 19,000 people found clear dose-response benefits up to ~300 minutes per week |
+| **Subgenual prefrontal cortex** | A brain region linked to rumination, self-referential negative thought, and depression | Nature walks reduce activity in this region, providing a direct neural explanation for lower depressive symptoms after time outdoors |
+
+---
+
 ## Sources
 
 1. **Kaplan, R., & Kaplan, S. (1989).** *The Experience of Nature: A Psychological Perspective.* Cambridge University Press. https://doi.org/10.1017/CBO9780511623783
