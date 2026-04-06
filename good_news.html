@@ -789,7 +789,11 @@ CONCEPTS COVERED:
                 description: description,
                 category: category,
                 source: fileName.replace('.md', '').replace(/_/g, ' '),
-                date: date
+                date: date,
+                emoji: getCategoryEmoji(category),
+                imageUrl: getCategoryImage(category),
+                fullContent: content,
+                isMarkdown: true
             };
         }
         
@@ -818,6 +822,30 @@ CONCEPTS COVERED:
                 }
             }
             return emojiMap['Default'];
+        }
+
+        function getCategoryImage(category) {
+            /* Map categories to illustration URLs using DiceBear API for AI-style illustrations */
+            const imageMap = {
+                'Psychology': 'https://api.dicebear.com/7.x/adventurer-neutral/svg?seed=psychology&scale=120',
+                'Health': 'https://api.dicebear.com/7.x/adventurer-neutral/svg?seed=health&scale=120',
+                'Science': 'https://api.dicebear.com/7.x/adventurer-neutral/svg?seed=science&scale=120',
+                'Environment': 'https://api.dicebear.com/7.x/adventurer-neutral/svg?seed=environment&scale=120',
+                'Technology': 'https://api.dicebear.com/7.x/adventurer-neutral/svg?seed=technology&scale=120',
+                'Business': 'https://api.dicebear.com/7.x/adventurer-neutral/svg?seed=business&scale=120',
+                'Culture': 'https://api.dicebear.com/7.x/adventurer-neutral/svg?seed=culture&scale=120',
+                'Education': 'https://api.dicebear.com/7.x/adventurer-neutral/svg?seed=education&scale=120',
+                'News': 'https://api.dicebear.com/7.x/adventurer-neutral/svg?seed=news&scale=120',
+                'Default': 'https://api.dicebear.com/7.x/adventurer-neutral/svg?seed=default&scale=120'
+            };
+            
+            /* Find matching image or use default */
+            for (let key in imageMap) {
+                if (category.toLowerCase().includes(key.toLowerCase())) {
+                    return imageMap[key];
+                }
+            }
+            return imageMap['Default'];
         }
         
         /* Will be populated with markdown articles from .md files */
@@ -979,13 +1007,17 @@ CONCEPTS COVERED:
             /*
             Set the HTML content using JavaScript template literal (backticks)
             Template literals allow ${variable} syntax to insert values
-            This creates: emoji | category, title, description, meta info
+            This creates: image | category, title, description, meta info
             For markdown articles, add a "Read More" button
             */
             const readMoreButton = newsItem.isMarkdown ? `<button class="read-more-btn">Read Full Article →</button>` : '';
             
+            const imageHtml = newsItem.imageUrl 
+                ? `<img src="${newsItem.imageUrl}" alt="${newsItem.category}" style="width: 100%; height: 100%; object-fit: cover;" />`
+                : `<div style="font-size: 120px; display: flex; align-items: center; justify-content: center;">${newsItem.emoji || '✨'}</div>`;
+            
             card.innerHTML = `
-                <div class="news-image">${newsItem.emoji}</div>
+                <div class="news-image">${imageHtml}</div>
                 <div class="news-content">
                     <div class="news-category">${newsItem.category}</div>
                     <h3 class="news-title">${newsItem.title}</h3>
