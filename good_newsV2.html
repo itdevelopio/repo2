@@ -828,20 +828,20 @@ CONCEPTS COVERED:
             /* Generate a unique seed from the article title for unique illustrations */
             let seed = title.toLowerCase().replace(/[^a-z0-9]/g, '');
             
-            /* Use Boring Avatars API which generates highly distinct visual designs */
-            /* Multiple varieties create completely different visual styles */
-            const varieties = ['bauhaus', 'ring', 'sunset', 'marble', 'beam', 'pixel'];
+            /* Use Robohash API which generates completely unique robot/creature designs per seed */
+            /* Robohash creates visually distinct SVG illustrations */
+            const sets = ['set1', 'set2', 'set3', 'set4'];
             
-            /* Select different style variety based on the seed itself */
-            let varietyIndex = 0;
+            /* Select different set based on the seed itself */
+            let setIndex = 0;
             if (seed.length > 0) {
-                varietyIndex = seed.charCodeAt(0) % varieties.length;
+                setIndex = seed.charCodeAt(0) % sets.length;
             }
             
-            const variety = varieties[varietyIndex];
+            const set = sets[setIndex];
             
-            /* Boring Avatars creates colorful, abstract, & SVG-based designs */
-            return `https://api.dicebear.com/7.x/boring-avatars/svg?seed=${seed}&variant=${variety}&scale=200`;
+            /* Robohash creates unique robotic creatures based on the seed */
+            return `https://robohash.org/${seed}?set=${set}&size=400x400`;
         }
         
         /* Will be populated with markdown articles from .md files */
