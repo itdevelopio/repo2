@@ -829,21 +829,25 @@ CONCEPTS COVERED:
             let seed = title.toLowerCase().replace(/[^a-z0-9]/g, '');
             
             /* Use DiceBear API with title-based seed to generate unique illustrations */
-            /* Different category styles for variety */
+            /* Multiple avatar styles for maximum visual variety */
             const styles = [
-                'adventurer-neutral', 
+                'adventurer-neutral',
                 'avataaars-neutral',
-                'notionists-neutral'
+                'notionists-neutral',
+                'bottts-neutral',
+                'croodles-neutral'
             ];
             
-            /* Select style based on category to add variety */
+            /* Select different style based on the seed itself to maximize visual variety */
+            /* Use character codes of first letters to determine style index */
             let styleIndex = 0;
-            if (category.includes('Science')) styleIndex = 1;
-            if (category.includes('Environment')) styleIndex = 2;
+            if (seed.length > 0) {
+                styleIndex = seed.charCodeAt(0) % styles.length;
+            }
             
             const style = styles[styleIndex];
             
-            return `https://api.dicebear.com/7.x/${style}/svg?seed=${seed}&scale=120`;
+            return `https://api.dicebear.com/7.x/${style}/svg?seed=${seed}&scale=150`;
         }
         
         /* Will be populated with markdown articles from .md files */
