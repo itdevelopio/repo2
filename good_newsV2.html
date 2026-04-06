@@ -833,40 +833,52 @@ CONCEPTS COVERED:
         }
 
         function getArticleImage(title, category) {
-            /* Map categories to relevant search terms for Unsplash stock photos */
-            const categoryKeywords = {
-                'Psychology': 'brain,mind,mental health',
-                'Health': 'wellness,health,medical',
-                'Science': 'science,research,laboratory',
-                'Environment': 'nature,earth,environment',
-                'Technology': 'technology,innovation,digital',
-                'Business': 'business,success,growth',
-                'Culture': 'art,culture,people',
-                'Education': 'education,learning,student',
-                'News': 'news,journalism,information',
-                'Default': 'positive,happiness,success'
+            /* Map categories to Pexels search URLs that return real stock photos */
+            const categoryImages = {
+                'Psychology': [
+                    'https://images.pexels.com/photos/3807517/pexels-photo-3807517.jpeg',
+                    'https://images.pexels.com/photos/3962286/pexels-photo-3962286.jpeg',
+                    'https://images.pexels.com/photos/3957987/pexels-photo-3957987.jpeg'
+                ],
+                'Health': [
+                    'https://images.pexels.com/photos/3962286/pexels-photo-3962286.jpeg',
+                    'https://images.pexels.com/photos/3873471/pexels-photo-3873471.jpeg',
+                    'https://images.pexels.com/photos/4021283/pexels-photo-4021283.jpeg'
+                ],
+                'Science': [
+                    'https://images.pexels.com/photos/3825517/pexels-photo-3825517.jpeg',
+                    'https://images.pexels.com/photos/3952632/pexels-photo-3952632.jpeg',
+                    'https://images.pexels.com/photos/5632399/pexels-photo-5632399.jpeg'
+                ],
+                'Environment': [
+                    'https://images.pexels.com/photos/2265876/pexels-photo-2265876.jpeg',
+                    'https://images.pexels.com/photos/3962284/pexels-photo-3962284.jpeg',
+                    'https://images.pexels.com/photos/574282/pexels-photo-574282.jpeg'
+                ],
+                'Technology': [
+                    'https://images.pexels.com/photos/373543/pexels-photo-373543.jpeg',
+                    'https://images.pexels.com/photos/3945683/pexels-photo-3945683.jpeg',
+                    'https://images.pexels.com/photos/2882552/pexels-photo-2882552.jpeg'
+                ],
+                'Default': [
+                    'https://images.pexels.com/photos/3808517/pexels-photo-3808517.jpeg',
+                    'https://images.pexels.com/photos/3844663/pexels-photo-3844663.jpeg',
+                    'https://images.pexels.com/photos/3873501/pexels-photo-3873501.jpeg'
+                ]
             };
             
-            /* Find matching keywords or use default */
-            let keywords = categoryKeywords['Default'];
-            for (let key in categoryKeywords) {
+            /* Find matching category images */
+            let images = categoryImages['Default'];
+            for (let key in categoryImages) {
                 if (category.toLowerCase().includes(key.toLowerCase())) {
-                    keywords = categoryKeywords[key];
+                    images = categoryImages[key];
                     break;
                 }
             }
             
-            /* Generate unique hash from title for varied results */
-            let hash = 0;
-            for (let i = 0; i < title.length; i++) {
-                hash = ((hash << 5) - hash) + title.charCodeAt(i);
-                hash = hash & hash;
-            }
-            
-            /* Use Unsplash API - returns random image from search query */
-            /* Adding hash ensures different images for different articles */
-            const query = keywords.split(',')[Math.abs(hash) % 3];
-            return `https://source.unsplash.com/600x400/?${query}&sig=${Math.abs(hash)}`;
+            /* Generate hash from title length to select different image */
+            const imageIndex = title.length % images.length;
+            return images[imageIndex];
         }
         
         /* Will be populated with markdown articles from .md files */
