@@ -245,8 +245,8 @@
         // GOOD NEWS PAGE - INFINITE SCROLL IMPLEMENTATION
         // ========================================================================
         
-        // Database of good news stories
-        const goodNewsData = [
+        // Base stories - real content
+        const baseStories = [
             {
                 emoji: "🌍",
                 category: "Environment",
@@ -329,6 +329,40 @@
             }
         ];
 
+        // Generate infinite variations on base stories
+        function generateStoryVariations(storyIndex, variationNumber) {
+            const baseStory = baseStories[storyIndex % baseStories.length];
+            const variations = [
+                "New Report Shows",
+                "Breaking News:",
+                "Latest Update:",
+                "Exciting Development:",
+                "Global Achievement:",
+                "Major Milestone:",
+                "Historic Moment:",
+                "Pioneering Effort:",
+                "Remarkable Progress:"
+            ];
+            
+            const daysAgo = ["Today", "Yesterday", "2 days ago", "3 days ago", "1 week ago", "2 weeks ago"];
+            
+            return {
+                ...baseStory,
+                title: variations[variationNumber % variations.length] + " " + baseStory.title,
+                date: daysAgo[variationNumber % daysAgo.length]
+            };
+        }
+
+        // Generate story on demand
+        function getStory(index) {
+            const baseIndex = index % baseStories.length;
+            const variationNumber = Math.floor(index / baseStories.length);
+            return generateStoryVariations(baseIndex, variationNumber);
+        }
+
+        // Create persistent data array that grows as needed
+        let goodNewsData = [];
+
         // ========================================================================
         // INFINITE SCROLL LOGIC
         // ========================================================================
@@ -336,7 +370,6 @@
         let currentIndex = 0;
         const itemsPerLoad = 6;
         let isLoading = false;
-        let hasMoreItems = true;
 
         const newsGrid = document.getElementById('newsGrid');
         const loadingIndicator = document.getElementById('loadingIndicator');
@@ -362,32 +395,28 @@
             return card;
         }
 
-        // Load more news items
+        // Load more news items (generates on demand)
         function loadMoreNews() {
-            if (isLoading || !hasMoreItems) return;
+            if (isLoading) return;
 
             isLoading = true;
             loadingIndicator.style.display = 'block';
 
             // Simulate network delay (optional)
             setTimeout(() => {
-                const itemsToAdd = goodNewsData.slice(
-                    currentIndex,
-                    currentIndex + itemsPerLoad
-                );
+                // Generate new stories on demand
+                const startIndex = goodNewsData.length;
+                for (let i = 0; i < itemsPerLoad; i++) {
+                    goodNewsData.push(getStory(startIndex + i));
+                }
 
-                itemsToAdd.forEach((newsItem, index) => {
+                // Display the newly generated items
+                goodNewsData.slice(startIndex, startIndex + itemsPerLoad).forEach((newsItem, index) => {
                     const card = createNewsCard(newsItem, index);
                     newsGrid.appendChild(card);
                 });
 
                 currentIndex += itemsPerLoad;
-
-                // Check if we've reached the end
-                if (currentIndex >= goodNewsData.length) {
-                    hasMoreItems = false;
-                    endMessage.style.display = 'block';
-                }
 
                 isLoading = false;
                 loadingIndicator.style.display = 'none';
@@ -400,13 +429,17 @@
             const scrollPosition = window.innerHeight + window.scrollY;
             const pageHeight = document.documentElement.scrollHeight;
 
-            // Load more when user is within 500px of the bottom
-            if (scrollPosition >= pageHeight - 500 && !isLoading && hasMoreItems) {
+            // Load more when user is within 500px of the bottom (infinite scroll)
+            if (scrollPosition >= pageHeight - 500 && !isLoading) {
                 loadMoreNews();
             }
         });
 
-        // Initial load
+        // Initial load - 6 articles to start
+        const startingIndex = goodNewsData.length;
+        for (let i = 0; i < 6; i++) {
+            goodNewsData.push(getStory(i));
+        }
         loadMoreNews();
     </script>
 </body>
