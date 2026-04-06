@@ -833,13 +833,40 @@ CONCEPTS COVERED:
         }
 
         function getArticleImage(title, category) {
-            /* Generate a unique seed from the article title for unique illustrations */
-            let seed = title.toLowerCase().replace(/[^a-z0-9]/g, '').substring(0, 50);
+            /* Map categories to relevant search terms for Unsplash stock photos */
+            const categoryKeywords = {
+                'Psychology': 'brain,mind,mental health',
+                'Health': 'wellness,health,medical',
+                'Science': 'science,research,laboratory',
+                'Environment': 'nature,earth,environment',
+                'Technology': 'technology,innovation,digital',
+                'Business': 'business,success,growth',
+                'Culture': 'art,culture,people',
+                'Education': 'education,learning,student',
+                'News': 'news,journalism,information',
+                'Default': 'positive,happiness,success'
+            };
             
-            /* Use Multiavatar API which generates completely unique avatar designs */
-            /* Multiavatar creates SVG avatars with high visual distinctness */
+            /* Find matching keywords or use default */
+            let keywords = categoryKeywords['Default'];
+            for (let key in categoryKeywords) {
+                if (category.toLowerCase().includes(key.toLowerCase())) {
+                    keywords = categoryKeywords[key];
+                    break;
+                }
+            }
             
-            return `https://api.multiavatar.com/${seed}.svg`;
+            /* Generate unique hash from title for varied results */
+            let hash = 0;
+            for (let i = 0; i < title.length; i++) {
+                hash = ((hash << 5) - hash) + title.charCodeAt(i);
+                hash = hash & hash;
+            }
+            
+            /* Use Unsplash API - returns random image from search query */
+            /* Adding hash ensures different images for different articles */
+            const query = keywords.split(',')[Math.abs(hash) % 3];
+            return `https://source.unsplash.com/600x400/?${query}&sig=${Math.abs(hash)}`;
         }
         
         /* Will be populated with markdown articles from .md files */
