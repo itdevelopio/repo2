@@ -791,7 +791,7 @@ CONCEPTS COVERED:
                 source: fileName.replace('.md', '').replace(/_/g, ' '),
                 date: date,
                 emoji: getCategoryEmoji(category),
-                imageUrl: getCategoryImage(category),
+                imageUrl: getArticleImage(title, category),
                 fullContent: content,
                 isMarkdown: true
             };
@@ -824,28 +824,26 @@ CONCEPTS COVERED:
             return emojiMap['Default'];
         }
 
-        function getCategoryImage(category) {
-            /* Map categories to illustration URLs using DiceBear API for AI-style illustrations */
-            const imageMap = {
-                'Psychology': 'https://api.dicebear.com/7.x/adventurer-neutral/svg?seed=psychology&scale=120',
-                'Health': 'https://api.dicebear.com/7.x/adventurer-neutral/svg?seed=health&scale=120',
-                'Science': 'https://api.dicebear.com/7.x/adventurer-neutral/svg?seed=science&scale=120',
-                'Environment': 'https://api.dicebear.com/7.x/adventurer-neutral/svg?seed=environment&scale=120',
-                'Technology': 'https://api.dicebear.com/7.x/adventurer-neutral/svg?seed=technology&scale=120',
-                'Business': 'https://api.dicebear.com/7.x/adventurer-neutral/svg?seed=business&scale=120',
-                'Culture': 'https://api.dicebear.com/7.x/adventurer-neutral/svg?seed=culture&scale=120',
-                'Education': 'https://api.dicebear.com/7.x/adventurer-neutral/svg?seed=education&scale=120',
-                'News': 'https://api.dicebear.com/7.x/adventurer-neutral/svg?seed=news&scale=120',
-                'Default': 'https://api.dicebear.com/7.x/adventurer-neutral/svg?seed=default&scale=120'
-            };
+        function getArticleImage(title, category) {
+            /* Generate a unique seed from the article title for unique illustrations */
+            let seed = title.toLowerCase().replace(/[^a-z0-9]/g, '');
             
-            /* Find matching image or use default */
-            for (let key in imageMap) {
-                if (category.toLowerCase().includes(key.toLowerCase())) {
-                    return imageMap[key];
-                }
-            }
-            return imageMap['Default'];
+            /* Use DiceBear API with title-based seed to generate unique illustrations */
+            /* Different category styles for variety */
+            const styles = [
+                'adventurer-neutral', 
+                'avataaars-neutral',
+                'notionists-neutral'
+            ];
+            
+            /* Select style based on category to add variety */
+            let styleIndex = 0;
+            if (category.includes('Science')) styleIndex = 1;
+            if (category.includes('Environment')) styleIndex = 2;
+            
+            const style = styles[styleIndex];
+            
+            return `https://api.dicebear.com/7.x/${style}/svg?seed=${seed}&scale=120`;
         }
         
         /* Will be populated with markdown articles from .md files */
