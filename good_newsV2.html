@@ -833,42 +833,41 @@ CONCEPTS COVERED:
         }
 
         function getArticleImage(title, category) {
-            /* Generate a strong hash from the entire article title for uniqueness */
+            /* Generate a strong hash from the entire article title */
             let hash = 0;
             for (let i = 0; i < title.length; i++) {
                 hash = ((hash << 5) - hash) + title.charCodeAt(i);
-                hash = hash & hash; // Convert to 32-bit integer
+                hash = hash & hash;
             }
             hash = Math.abs(hash);
             
-            /* Map categories to Picsum image IDs for variety */
-            const categoryImageIds = {
-                'Psychology': [10, 20, 30, 40, 50, 60, 70, 80, 90, 100],
-                'Health': [110, 120, 130, 140, 150, 160, 170, 180, 190, 200],
-                'Science': [210, 220, 230, 240, 250, 260, 270, 280, 290, 300],
-                'Environment': [310, 320, 330, 340, 350, 360, 370, 380, 390, 400],
-                'Technology': [410, 420, 430, 440, 450, 460, 470, 480, 490, 500],
-                'Business': [510, 520, 530, 540, 550, 560, 570, 580, 590, 600],
-                'Culture': [610, 620, 630, 640, 650, 660, 670, 680, 690, 700],
-                'Education': [710, 720, 730, 740, 750, 760, 770, 780, 790, 800],
-                'News': [810, 820, 830, 840, 850, 860, 870, 880, 890, 900],
-                'Default': [1, 101, 201, 301, 401, 501, 601, 701, 801, 901]
+            /* Add category-based offset for more variation */
+            const categoryOffsets = {
+                'Psychology': 0,
+                'Health': 10000,
+                'Science': 20000,
+                'Environment': 30000,
+                'Technology': 40000,
+                'Business': 50000,
+                'Culture': 60000,
+                'Education': 70000,
+                'News': 80000,
+                'Default': 90000
             };
             
-            /* Find matching category images */
-            let ids = categoryImageIds['Default'];
-            for (let key in categoryImageIds) {
+            let offset = categoryOffsets['Default'];
+            for (let key in categoryOffsets) {
                 if (category.toLowerCase().includes(key.toLowerCase())) {
-                    ids = categoryImageIds[key];
+                    offset = categoryOffsets[key];
                     break;
                 }
             }
             
-            /* Select image based on hash to ensure uniqueness per article */
-            const selectedId = ids[hash % ids.length];
+            /* Create unique image ID combining hash and offset */
+            const imageId = (hash + offset) % 100000;
             
-            /* Use Picsum Photos with large seed range for varied images */
-            return `https://picsum.photos/600/400?random=${selectedId}`;
+            /* Use Picsum.photos with very high ID range for maximum diversity */
+            return `https://picsum.photos/600/400?random=${imageId}`;
         }
         
         /* Will be populated with markdown articles from .md files */
