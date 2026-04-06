@@ -44,69 +44,74 @@
         }
 
         .news-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
             margin-bottom: 50px;
         }
 
         .news-card {
             background: white;
-            border-radius: 12px;
+            border-radius: 8px;
             overflow: hidden;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
             transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             animation: fadeInUp 0.6s ease-out backwards;
             cursor: pointer;
-            border: 2px solid transparent;
+            display: grid;
+            grid-template-columns: 400px 1fr;
+            border-bottom: 3px solid #667eea;
         }
 
         .news-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.2);
-            border-color: #667eea;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            background: #fafafa;
         }
 
         .news-image {
             width: 100%;
-            height: 220px;
+            height: 300px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 80px;
+            font-size: 120px;
         }
 
         .news-content {
-            padding: 24px;
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
         .news-category {
             display: inline-block;
             background: #667eea;
             color: white;
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            margin-bottom: 12px;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 700;
+            margin-bottom: 16px;
             text-transform: uppercase;
-            letter-spacing: 1px;
+            letter-spacing: 1.5px;
+            width: fit-content;
         }
 
         .news-title {
-            font-size: 20px;
-            font-weight: 700;
-            color: #333;
-            margin-bottom: 12px;
-            line-height: 1.4;
+            font-size: 28px;
+            font-weight: 800;
+            color: #1a1a1a;
+            margin-bottom: 16px;
+            line-height: 1.3;
         }
 
         .news-description {
-            font-size: 14px;
-            color: #666;
-            line-height: 1.6;
-            margin-bottom: 16px;
+            font-size: 15px;
+            color: #444;
+            line-height: 1.7;
+            margin-bottom: 20px;
         }
 
         .news-meta {
@@ -115,6 +120,8 @@
             align-items: center;
             font-size: 12px;
             color: #999;
+            padding-top: 16px;
+            border-top: 1px solid #eee;
         }
 
         .news-date {
@@ -191,9 +198,20 @@
                 font-size: 36px;
             }
 
-            .news-grid {
+            .news-card {
                 grid-template-columns: 1fr;
-                gap: 20px;
+            }
+
+            .news-image {
+                height: 250px;
+            }
+
+            .news-title {
+                font-size: 22px;
+            }
+
+            .news-content {
+                padding: 20px;
             }
 
             header {
@@ -233,161 +251,81 @@
                 emoji: "🌍",
                 category: "Environment",
                 title: "Global Tree Planting Initiative Surpasses 15 Billion Trees",
-                description: "A worldwide effort to combat climate change has successfully planted over 15 billion trees, creating millions of jobs and improving air quality across continents.",
+                description: "In a landmark achievement for environmental restoration, a coordinated worldwide effort to combat climate change and deforestation has successfully planted over 15 billion trees across all continents. The initiative, which began seven years ago with ambitious goals, has created millions of sustainable jobs in rural communities, improved air quality measurably in major cities, and restored ecosystems in previously degraded regions. Scientists report that the carbon sequestration potential of these planted forests could offset billions of tons of carbon dioxide over the coming decades. Indigenous communities have played a crucial role in the project, combining traditional ecological knowledge with modern conservation techniques to ensure the long-term survival and health of the restored forests.",
                 source: "GreenEarth News",
                 date: "Today"
             },
             {
                 emoji: "🏥",
                 category: "Health",
-                title: "New Cancer Treatment Shows 90% Remission Rate",
-                description: "Scientists have developed a breakthrough immunotherapy that cures cancer in 9 out of 10 patients, offering hope to millions worldwide.",
+                title: "New Cancer Treatment Shows 90% Remission Rate in Breakthrough Study",
+                description: "Researchers from leading medical institutions worldwide have unveiled a revolutionary immunotherapy treatment that achieves a 90% remission rate in previously incurable cancer cases. The groundbreaking therapy harnesses the patient's own immune system to target and eliminate cancer cells with unprecedented precision. Clinical trials involving thousands of patients across multiple continents have demonstrated dramatic improvements in survival rates and quality of life. The treatment works by training immune cells to recognize and destroy cancerous growths while leaving healthy tissue unharmed. With affordability improvements already underway, this discovery offers genuine hope to the millions of cancer patients worldwide who had previously faced limited treatment options. Medical experts are calling it one of the most significant breakthroughs in oncology of the past two decades.",
                 source: "Medical Today",
                 date: "Yesterday"
             },
             {
                 emoji: "🎓",
                 category: "Education",
-                title: "Free Online Education Reaches 500 Million Students",
-                description: "Educational platforms are now providing quality learning opportunities to students in developing countries, closing the education gap.",
+                title: "Free Online Education Reaches 500 Million Students Worldwide",
+                description: "In a transformative moment for global education, major online learning platforms have successfully provided high-quality educational content to over 500 million students across developing nations. The initiative addresses the critical global challenge of educational inequality, ensuring that students in remote villages and poor urban neighborhoods now have access to the same learning resources as those in wealthy countries. Teachers in underserved regions report that their students are achieving significantly higher test scores and demonstrating greater confidence in their academic abilities. The program has introduced curriculum in over 150 languages, making quality education genuinely accessible to marginalized communities. Universities from developed nations have partnered to create locally-relevant content while maintaining world-class standards. Experts predict that within a generation, this educational democratization will produce skilled professionals from populations previously cut off from opportunity.",
                 source: "Learning Hub",
                 date: "2 days ago"
             },
             {
                 emoji: "🚀",
                 category: "Technology",
-                title: "Clean Energy Now Provides 50% of Global Power",
-                description: "Renewable energy sources have reached a milestone, now generating half of the world's electricity and continuing to grow.",
+                title: "Clean Energy Now Provides 50% of Global Electricity Supply",
+                description: "A historic milestone has been reached as renewable energy sources including solar, wind, and hydroelectric power now generate 50% of the world's electricity. This unprecedented achievement represents a fundamental shift in global energy production and marks a turning point in humanity's fight against climate change. Technological advancements in solar efficiency and battery storage have made clean energy not just environmentally necessary but economically competitive with fossil fuels. Developing nations are particularly benefiting from the declining costs of renewable technology, allowing them to build modern energy infrastructure without the stranded assets of outdated coal and oil dependence. Industry experts report that clean energy investments have created more jobs than the entire fossil fuel industry previously employed. The momentum continues to accelerate, with projections suggesting 70% renewable electricity by 2030.",
                 source: "TechTimes",
                 date: "3 days ago"
             },
             {
                 emoji: "🤝",
                 category: "Community",
-                title: "Volunteers Build 1,000 Homes for Homeless Families",
-                description: "A global initiative has provided stable homes to over 1,000 families, offering them hope and dignity for a fresh start.",
+                title: "Global Volunteer Movement Builds 1,000 Homes for Families in Need",
+                description: "An inspiring international coalition of volunteers, corporations, and nonprofits has successfully constructed over 1,000 dignified homes for families experiencing homelessness. The massive undertaking coordinated efforts across dozens of countries, mobilizing over 100,000 volunteer work hours and demonstrating the power of collective action. Each home, built using sustainable materials and modern construction techniques, provides not just shelter but a foundation for transformed lives. Participating families report dramatic improvements in children's school attendance, adult employment prospects, and overall mental health since obtaining stable housing. The project has also revitalized struggling neighborhoods, creating community gardens, playgrounds, and gathering spaces alongside the homes. Organizations involved report that the increased stability allows families to address health issues, pursue education, and contribute more fully to their communities.",
                 source: "Community Weekly",
                 date: "4 days ago"
             },
             {
                 emoji: "🐼",
                 category: "Wildlife",
-                title: "Endangered Species Population Doubles in 5 Years",
-                description: "Conservation efforts have successfully increased the population of several endangered species, marking a major victory for biodiversity.",
+                title: "Endangered Species Population Doubles Following Five-Year Conservation Effort",
+                description: "One of the most uplifting environmental success stories in recent memory unfolded this week as populations of several critically endangered species have doubled over the past five years. Coordinated international conservation efforts have created protected habitats, reduced poaching through indigenous ranger programs, and implemented DNA-based monitoring systems to track recovery. The achievement encompasses species from diverse ecosystems including giant pandas, African elephants, Indian tigers, and numerous bird and amphibian species. Scientists attribute the success to combining legal protections with economic incentives for local communities to preserve wildlife habitats. The recovery demonstrates that extinction is not inevitable when sufficient resources and political will are committed to conservation. Conservation organizations are expanding successful programs to protect hundreds of additional species currently facing extinction threats.",
                 source: "Nature Today",
                 date: "5 days ago"
             },
             {
                 emoji: "💚",
                 category: "Social Good",
-                title: "Child Poverty Rates Drop by 40% Globally",
-                description: "International cooperation and local initiatives have dramatically reduced child poverty, improving millions of lives.",
+                title: "Child Poverty Rates Decline by 40% in Global Achievement",
+                description: "In perhaps the most significant victory for global social progress in decades, international development organizations report that child poverty rates have dropped by 40% globally over the past ten years. This extraordinary improvement reflects coordinated efforts in education access, healthcare provision, and economic opportunity creation across developing nations. Millions of children who previously worked in hazardous conditions or missed school due to poverty now attend classes regularly and have prospects for better futures. The improvement is particularly pronounced in sub-Saharan Africa and Southeast Asia, where targeted interventions have proven remarkably effective. Programs combining microfinance, education subsidies, and healthcare access have created sustainable pathways out of poverty. Child labor has declined dramatically, with millions of children now able to pursue education instead of working to support their families. Development experts attribute success to both increased international aid and improved governance in recipient nations.",
                 source: "Good News Network",
                 date: "6 days ago"
             },
             {
                 emoji: "🔬",
                 category: "Science",
-                title: "Alzheimer's Vaccine Enters Final Testing Phase",
-                description: "A promising vaccine for Alzheimer's disease is showing remarkable results in clinical trials, with potential to prevent the disease.",
+                title: "Alzheimer's Vaccine Enters Critical Final Testing Phase with Stunning Results",
+                description: "A groundbreaking vaccine targeting Alzheimer's disease has advanced into final human clinical trials after demonstrating remarkable effectiveness in preventing cognitive decline. The therapeutic vaccine works by training the immune system to target amyloid-beta proteins that accumulate in the brains of Alzheimer's patients. Preliminary trials show that people receiving the vaccine maintain cognitive function while untreated patients in comparison groups experienced measurable mental decline. If successful in final trials, the vaccine could prevent the development of Alzheimer's disease in millions of people worldwide, rather than simply treating symptoms after brain damage occurs. The discovery represents a fundamental shift from managing disease to preventing it entirely. With over 150 million people projected to suffer from Alzheimer's by 2050, this preventive approach could spare hundreds of millions from this devastating illness.",
                 source: "Science Daily",
                 date: "1 week ago"
             },
             {
                 emoji: "🌱",
                 category: "Agriculture",
-                title: "Vertical Farming Ends Food Scarcity in African Cities",
-                description: "Innovation in urban farming has brought fresh produce to food-insecure areas, creating jobs and improving nutrition.",
+                title: "Vertical Farming Revolution Ends Food Scarcity in Urban African Centers",
+                description: "An agricultural innovation reshaping food security in Africa has emerged as vertical farming systems transform vacant urban spaces into productive food production centers. Modern hydroponic and aeroponic systems allow African cities to grow fresh vegetables, fruits, and grains year-round regardless of climate conditions, while using 95% less water than traditional agriculture. The technology has moved from experimental installations to commercial operations providing consistent supplies of affordable fresh produce to formerly food-insecure neighborhoods. Young entrepreneurs, particularly women, are establishing themselves as vertical farm operators, creating economic opportunities in economically disadvantaged communities. The localized production model dramatically reduces transportation costs and environmental impact compared to importing food across continents. Nutritional improvements in communities adopting vertical-farmed produce have been documented, with reduced malnutrition and improved health outcomes. The proven model is rapidly expanding to other continents.",
                 source: "Agri-News",
                 date: "1 week ago"
             },
             {
                 emoji: "🎵",
                 category: "Culture",
-                title: "Young Artists Win Global Recognition and Support",
-                description: "Emerging talents from around the world are receiving unprecedented support and platforms to share their creativity.",
+                title: "Young Artists from Around Globe Win International Recognition and Career Support",
+                description: "A newly established global arts initiative has identified and provided substantial support to thousands of young artists from disadvantaged backgrounds, launching previously undiscovered talent onto the international stage. The program recognizes that artistic genius exists everywhere but only becomes visible when resources and platforms are provided to develop and showcase it. Young musicians, visual artists, dancers, and writers from rural regions, refugee camps, and low-income neighborhoods have been connected with mentors, performance opportunities, and financial support to pursue their crafts. International audiences are discovering remarkable artists whose perspectives and styles reflect unique cultural backgrounds and lived experiences. Record galleries have funded exhibitions by previously unknown artists who now command significant recognition and sales. The initiative demonstrates that talent is universally distributed while opportunity has been historically concentrated, and that addressing that disparity unleashes extraordinary human creativity.",
                 source: "Arts Weekly",
                 date: "8 days ago"
-            },
-            {
-                emoji: "⚽",
-                category: "Sports",
-                title: "Sports Unite Communities, Reduce Crime Rates",
-                description: "Community sports programs are bringing people together, reducing youth crime by 35% in participating neighborhoods.",
-                source: "Sports Life",
-                date: "9 days ago"
-            },
-            {
-                emoji: "🏃‍♀️",
-                category: "Health",
-                title: "Life Expectancy Reaches All-Time High",
-                description: "Global life expectancy has increased to 73 years, with healthcare improvements benefiting people in all regions.",
-                source: "Health News Daily",
-                date: "10 days ago"
-            },
-            {
-                emoji: "🌊",
-                category: "Environment",
-                title: "Ocean Cleanup Technology Removes Millions of Tons of Plastic",
-                description: "Advanced technology is successfully clearing plastic from oceans, restoring marine ecosystems and protecting wildlife.",
-                source: "Eco Times",
-                date: "11 days ago"
-            },
-            {
-                emoji: "👩‍💼",
-                category: "Economy",
-                title: "Women Entrepreneurs Create 5 Million New Jobs",
-                description: "Female business leaders are driving economic growth and creating employment opportunities in emerging markets.",
-                source: "Business World",
-                date: "12 days ago"
-            },
-            {
-                emoji: "🎁",
-                category: "Social",
-                title: "Global Charity Breaks Records with $100 Billion Raised",
-                description: "Record-breaking donations are helping organizations tackle poverty, disease, and inequality worldwide.",
-                source: "Giving News",
-                date: "13 days ago"
-            },
-            {
-                emoji: "🏡",
-                category: "Housing",
-                title: "Affordable Housing Initiative Shelters 2 Million People",
-                description: "A coordinated effort has provided safe, affordable homes to millions, transforming communities worldwide.",
-                source: "Housing Today",
-                date: "14 days ago"
-            },
-            {
-                emoji: "💡",
-                category: "Innovation",
-                title: "Breakthrough Battery Technology Lasts 20+ Years",
-                description: "New battery innovation promises to last decades, revolutionizing electric vehicles and renewable energy storage.",
-                source: "Innovation Hub",
-                date: "15 days ago"
-            },
-            {
-                emoji: "🌈",
-                category: "Equality",
-                title: "Gender Equality Legislation Passes in 100+ Countries",
-                description: "International movement ensures equal rights and opportunities for all, marking unprecedented progress for equality.",
-                source: "Rights Watch",
-                date: "16 days ago"
-            },
-            {
-                emoji: "🎓",
-                category: "Education",
-                title: "Literacy Rate Reaches 90% Globally",
-                description: "Global literacy initiatives have nearly eliminated illiteracy, empowering billions to read, write, and learn.",
-                source: "Education News",
-                date: "17 days ago"
-            },
-            {
-                emoji: "🌍",
-                category: "Peace",
-                title: "Historic Peace Treaty Ends Regional Conflict",
-                description: "Former adversaries sign landmark peace agreement, opening doors for cooperation and mutual development.",
-                source: "Peace Today",
-                date: "18 days ago"
             }
         ];
 
