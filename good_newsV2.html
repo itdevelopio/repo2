@@ -775,10 +775,10 @@ CONCEPTS COVERED:
                 }
                 if (foundTitle && line.trim() !== '' && !line.startsWith('#')) {
                     paraLines.push(line.trim());
-                    if (paraLines.join(' ').length > 200) break;
+                    if (paraLines.join(' ').length > 600) break;
                 }
             }
-            description = paraLines.join(' ').substring(0, 300) + '...';
+            description = paraLines.join(' ').substring(0, 700) + '...';
             
             /* Extract category from filename */
             const nameParts = fileName.replace('.md', '').split('_');
