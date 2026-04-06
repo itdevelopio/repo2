@@ -718,57 +718,159 @@ CONCEPTS COVERED:
         // Fetch markdown articles from backend server
         async function loadMarkdownArticles() {
             try {
-                /* Attempt to fetch articles from backend server */
-                const response = await fetch('http://localhost:3000/get-articles');
+                /*
+                LOAD MARKDOWN ARTICLES FROM GITHUB
+                Fetch list of files from GitHub API, then get raw content for each .md file
+                */
+                const owner = 'itdevelopio';
+                const repo = 'repo2';
+                const branch = 'main';
+                const folder = 'news_articles';
+                
+                /* Step 1: Get list of files in news_articles folder from GitHub API */
+                const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${folder}`;
+                const response = await fetch(apiUrl);
                 
                 if (!response.ok) {
-                    console.warn('Could not fetch markdown articles (server may not be running)');
+                    console.warn('Could not fetch markdown files from GitHub');
+                    allStories = baseStories;
                     return false;
                 }
                 
-                const data = await response.json();
+                const files = await response.json();
                 
-                if (data.status === 'success' && data.articles && data.articles.length > 0) {
-                    /*
-                    Convert markdown articles to story format
-                    Add emoji based on category
-                    Include fullContent for modal display
-                    */
-                    markdownArticles = data.articles.map(article => ({
+                /* Filter only .md files */
+                const mdFiles = files.filter(file => file.name.endsWith('.md'));
+                
+                if (mdFiles.length === 0) {
+                    console.warn('No markdown files found in GitHub');
+                    allStories = baseStories;
+                    return false;
+                }
+                
+                /* Step 2: Fetch and parse each markdown file */
+                const articlePromises = mdFiles.map(async (file) => {
+                    try {
+                        const rawUrl = `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${folder}/${file.name}`;
+                        const fileResponse = await fetch(rawUrl);
+                        
+                        if (!fileResponse.ok) {
+                            console.warn(`Failed to fetch ${file.name}`);
+                            return null;
+                        }
+                        
+                        const content = await fileResponse.text();
+                        
+                        /* Parse the markdown content */
+                        const parsed = parseMarkdownFile(content, file.name);
+                        
+                        return {
+                            ...parsed,
+                            fullContent: content,  /* Store full markdown for modal */
+                            isMarkdown: true,
+                            fileName: file.name,
+                            lastModified: file.updated_at || new Date().toISOString()
+                        };
+                    } catch (error) {
+                        console.error(`Error processing ${file.name}:`, error);
+                        return null;
+                    }
+                });
+                
+                /* Wait for all articles to load */
+                const articles = await Promise.all(articlePromises);
+                const validArticles = articles.filter(a => a !== null);
+                
+                if (validArticles.length > 0) {
+                    /* Sort by modification date (newest first) */
+                    validArticles.sort((a, b) => new Date(b.lastModified) - new Date(a.lastModified));
+                    
+                    /* Convert to story format with emoji */
+                    markdownArticles = validArticles.map(article => ({
                         emoji: getCategoryEmoji(article.category),
                         category: article.category,
                         title: article.title,
                         description: article.description,
                         source: article.source,
                         date: article.date,
-                        fullContent: article.fullContent,  /* Full markdown content for modal */
-                        isMarkdown: true,  /* Flag to identify markdown articles */
+                        fullContent: article.fullContent,
+                        isMarkdown: true,
                         fileName: article.fileName
                     }));
                     
-                    /*
-                    Prepend markdown articles to the beginning
-                    They will be displayed first in the infinite scroll
-                    Sort is already done by server (newest first)
-                    */
+                    /* Merge with base stories (markdown articles first) */
                     allStories = markdownArticles.concat(baseStories);
-                    console.log(`✓ Loaded ${markdownArticles.length} markdown articles from backend`);
+                    console.log(`✓ Loaded ${markdownArticles.length} markdown articles from GitHub`);
                     return true;
                 } else {
-                    console.warn('Invalid response from server or no articles found');
+                    console.warn('No valid articles found');
                     allStories = baseStories;
                     return false;
                 }
             } catch (error) {
                 /*
-                Graceful fallback if server is not running
-                Just use base stories without markdown articles
+                Graceful fallback - use base stories only
                 */
-                console.warn('Backend server not available. Using base stories only.');
-                console.log('💡 Tip: Run "node server.js" in terminal to enable markdown article loading');
+                console.warn('Could not load markdown articles from GitHub.');
+                console.log('Error:', error.message);
                 allStories = baseStories;
                 return false;
             }
+        }
+        
+        /*
+        PARSE MARKDOWN FILE
+        Extracts title, description, category from markdown content
+        */
+        function parseMarkdownFile(content, fileName) {
+            const lines = content.split('\n');
+            let title = 'Untitled Article';
+            let description = '';
+            let category = 'News';
+            
+            /* Extract title from first # heading */
+            for (let line of lines) {
+                if (line.startsWith('# ')) {
+                    title = line.replace('# ', '').trim();
+                    break;
+                }
+            }
+            
+            /* Extract description from first paragraph after title */
+            let foundTitle = false;
+            let paraLines = [];
+            for (let line of lines) {
+                if (line.startsWith('# ')) {
+                    foundTitle = true;
+                    continue;
+                }
+                if (foundTitle && line.trim() !== '' && !line.startsWith('#')) {
+                    paraLines.push(line.trim());
+                    if (paraLines.join(' ').length > 200) break;
+                }
+            }
+            description = paraLines.join(' ').substring(0, 300) + '...';
+            
+            /* Extract category from filename */
+            const nameParts = fileName.replace('.md', '').split('_');
+            if (nameParts.length > 0) {
+                category = nameParts[0].charAt(0).toUpperCase() + nameParts[0].slice(1);
+            }
+            
+            /* Get current date (since GitHub API doesn't always give us file modification time) */
+            const date = new Date().toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'short', 
+                day: 'numeric' 
+            });
+            
+            return {
+                title: title,
+                description: description,
+                category: category,
+                source: fileName.replace('.md', '').replace(/_/g, ' '),
+                date: date
+            };
         }
         
         /*
