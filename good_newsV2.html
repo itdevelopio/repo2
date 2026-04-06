@@ -833,45 +833,37 @@ CONCEPTS COVERED:
         }
 
         function getArticleImage(title, category) {
-            /* Generate a strong hash from the entire article title */
-            let hash = 0;
-            for (let i = 0; i < title.length; i++) {
-                hash = ((hash << 5) - hash) + title.charCodeAt(i);
-                hash = hash & hash;
+            /* Generate a unique seed from the entire article title */
+            let seed = title.toLowerCase().replace(/[^a-z0-9]/g, '');
+            
+            /* Add category prefix for additional variation */
+            const categoryPrefixes = {
+                'Psychology': 'psy_',
+                'Health': 'hlth_',
+                'Science': 'sci_',
+                'Environment': 'env_',
+                'Technology': 'tech_',
+                'Business': 'biz_',
+                'Culture': 'cult_',
+                'Education': 'edu_',
+                'News': 'news_',
+                'Default': 'img_'
+            };
+            
+            let prefix = categoryPrefixes['Default'];
+            for (let key in categoryPrefixes) {
+                if (category.toLowerCase().includes(key.toLowerCase())) {
+                    prefix = categoryPrefixes[key];
+                    break;
+                }
             }
-            hash = Math.abs(hash);
             
-            /* Large pool of diverse free stock photo URLs from Unsplash (one per ID) */
-            const allImageUrls = [
-                'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&h=400&fit=crop',
-                'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=600&h=400&fit=crop',
-                'https://images.unsplash.com/photo-1503225335684-75740cecb0f5?w=600&h=400&fit=crop',
-                'https://images.unsplash.com/photo-1507925921958-23e890917117?w=600&h=400&fit=crop',
-                'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=600&h=400&fit=crop',
-                'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&h=400&fit=crop',
-                'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=600&h=400&fit=crop',
-                'https://images.unsplash.com/photo-1517457373614-b7152f800fd1?w=600&h=400&fit=crop',
-                'https://images.unsplash.com/photo-1531482615713-2afd69097998?w=600&h=400&fit=crop',
-                'https://images.unsplash.com/photo-1506157786151-b8491531f063?w=600&h=400&fit=crop',
-                'https://images.unsplash.com/photo-1517457373614-b7152f800fd1?w=600&h=400&fit=crop',
-                'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=600&h=400&fit=crop',
-                'https://images.unsplash.com/photo-1511379938547-c1f69b13d835?w=600&h=400&fit=crop',
-                'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=600&h=400&fit=crop',
-                'https://images.unsplash.com/photo-1469022563149-aa64dbd37dda?w=600&h=400&fit=crop',
-                'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&h=400&fit=crop',
-                'https://images.unsplash.com/photo-1475274047050-1d0c0975c63e?w=600&h=400&fit=crop',
-                'https://images.unsplash.com/photo-1519904981063-b0cf448d479e?w=600&h=400&fit=crop',
-                'https://images.unsplash.com/photo-1505228395891-9a51e7e86e81?w=600&h=400&fit=crop',
-                'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&h=400&fit=crop'
-            ];
+            /* Combine prefix and seed for unique image */
+            const fullSeed = prefix + seed;
             
-            /* Add more URLs dynamically to ensure uniqueness */
-            const extendedUrls = [...allImageUrls];
-            
-            /* Select from the pool based on hash */
-            const selectedUrl = extendedUrls[hash % extendedUrls.length];
-            
-            return selectedUrl;
+            /* Use Lorem Picsum which generates unique images from text seeds */
+            /* Lorem Picsum is reliable and generates different images per seed */
+            return `https://picsum.photos/seed/${fullSeed}/600/400`;
         }
         
         /* Will be populated with markdown articles from .md files */
