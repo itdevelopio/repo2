@@ -1,0 +1,1236 @@
+<!--
+================================================================================
+                    GOOD NEWS DAILY - EDUCATIONAL EDITION
+================================================================================
+
+WHAT YOU'LL LEARN:
+  This is a complete example of modern web development with:
+  ✓ Responsive HTML structure
+  ✓ CSS Grid & Flexbox layouts
+  ✓ CSS animations and transitions
+  ✓ JavaScript event handling
+  ✓ Dynamic DOM manipulation
+  ✓ Infinite scroll implementation
+  ✓ Algorithmic content generation
+
+CONCEPTS COVERED:
+  - HTML: semantic structure, meta tags, accessibility
+  - CSS: layouts, animations, media queries, transitions
+  - JavaScript: functions, closures, event listeners, array methods
+  - Performance: lazy loading, scroll detection, state management
+  - User Experience: loading states, animations, feedback
+
+================================================================================
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Meta tags configure browser behavior and device compatibility -->
+    <meta charset="UTF-8">
+    <!-- viewport enables responsive design on mobile devices -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Good News Daily - Positive Stories</title>
+    <style>
+        /*
+        ====================================================================
+        CSS RESET - Remove browser defaults
+        ====================================================================
+        The * selector targets ALL elements. We reset spacing because browsers
+        add default margins/padding. box-sizing: border-box makes padding count
+        toward the width (standard behavior in modern CSS).
+        */
+        * {
+            margin: 0;              /* Remove default margins */
+            padding: 0;             /* Remove default padding */
+            box-sizing: border-box; /* Include padding in width calculations */
+        }
+
+        /*
+        BODY - Sets default appearance for entire page
+        linear-gradient(135deg, color1, color2) creates diagonal color blend
+        min-height: 100vh ensures body fills full viewport height
+        */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);  /* Purple gradient */
+            min-height: 100vh;  /* Fill full viewport height */
+            padding: 20px;      /* Comfortable space around edges */
+        }
+
+        /*
+        CONTAINER - Limits width and centers content on large screens
+        max-width prevents layout from becoming too wide (improves readability)
+        margin: 0 auto centers it horizontally
+        */
+        .container {
+            max-width: 1200px;  /* Limit width for better reading */
+            margin: 0 auto;     /* Center horizontally */
+        }
+
+        /*
+        HEADER - Main title section with animation
+        animation: slideDown makes the header smoothly slide down from above
+        0.8s is duration, ease-out makes it slow down at the end
+        */
+        header {
+            text-align: center;
+            color: white;
+            margin-bottom: 50px;
+            animation: slideDown 0.8s ease-out;  /* Smooth entrance animation */
+        }
+
+        header h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        header p {
+            font-size: 18px;
+            opacity: 0.95;
+            font-weight: 300;
+        }
+
+        /*
+        NEWS GRID - Container for stacking articles vertically
+        display: flex with flex-direction: column arranges items top-to-bottom
+        gap: 30px creates space between items (cleaner than using margins)
+        */
+        .news-grid {
+            display: flex;           /* Use flexbox for layout */
+            flex-direction: column;  /* Stack items vertically */
+            gap: 30px;               /* Space between each article */
+            margin-bottom: 50px;
+        }
+
+        /*
+        NEWS CARD - Individual article (Daily Mail style with image on left)
+        display: grid with grid-template-columns: 400px 1fr creates TWO columns:
+          Column 1: 400px fixed width image)
+          Column 2: 1fr (fraction unit - takes remaining space)
+        animation: fadeInUp makes cards smoothly fade in while sliding up
+        */
+        .news-card {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);  /* Subtle shadow for depth */
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);  /* Smooth hover effects */
+            animation: fadeInUp 0.6s ease-out backwards;  /* Entrance animation */
+            cursor: pointer;
+            display: grid;
+            grid-template-columns: 400px 1fr;  /* Image (fixed) | Content (flexible) */
+            border-bottom: 3px solid #667eea;  /* Accent border (Daily Mail style) */
+        }
+
+        .news-card:hover {
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            background: #fafafa;
+        }
+
+        /*
+        NEWS IMAGE - Left column of card (400px width, fixed)
+        Uses flexbox (display: flex, align-items: center, justify-content: center)
+        to center the emoji vertically and horizontally
+        */
+        .news-image {
+            width: 100%;                           /* Fill 400px column */
+            height: 300px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);  /* Gradient background */
+            display: flex;              /* Use flexbox to center emoji */
+            align-items: center;        /* Vertical center */
+            justify-content: center;    /* Horizontal center */
+            font-size: 120px;           /* Large emoji */
+        }
+
+        /*
+        NEWS CONTENT - Right column of card (flexible width)
+        Uses flex column to stack: category, title, description, meta (top to bottom)
+        justify-content: space-between spreads them out with meta info at bottom
+        */
+        .news-content {
+            padding: 32px;                    /* Internal spacing for readability */
+            display: flex;                    /* Stack content vertically */
+            flex-direction: column;
+            justify-content: space-between;   /* Spread items with meta at bottom */
+        }
+
+        .news-category {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            width: fit-content;
+        }
+
+        .news-title {
+            font-size: 28px;
+            font-weight: 800;
+            color: #1a1a1a;
+            margin-bottom: 16px;
+            line-height: 1.3;
+        }
+
+        .news-description {
+            font-size: 15px;
+            color: #444;
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+
+        .news-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            color: #999;
+            padding-top: 16px;
+            border-top: 1px solid #eee;
+        }
+
+        .news-date {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .news-source {
+            background: #f0f0f0;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        /* "Read More" button for markdown articles */
+        .read-more-btn {
+            margin-top: 16px;
+            padding: 8px 16px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 12px;
+            transition: background 0.3s ease;
+        }
+
+        .read-more-btn:hover {
+            background: #764ba2;
+        }
+
+        /* Make markdown cards clickable */
+        .news-card.markdown-article {
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .news-card.markdown-article:hover {
+            transform: translateY(-4px);
+        }
+
+        /* 
+        ====================================================================
+        MODAL STYLES - Full article viewer
+        ====================================================================
+        Modal overlay appears on top of page to show full content
+        */
+        .modal {
+            display: none;  /* Hidden by default */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);  /* Dark overlay */
+            z-index: 1000;
+            overflow-y: auto;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            max-width: 850px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 40px;
+            position: relative;
+            animation: slideUp 0.3s ease;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .modal-title-section h1 {
+            font-size: 32px;
+            font-weight: 800;
+            color: #1a1a1a;
+            margin-bottom: 12px;
+            line-height: 1.3;
+        }
+
+        .modal-category {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: #999;
+            padding: 0;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.2s;
+        }
+
+        .modal-close:hover {
+            color: #333;
+        }
+
+        .modal-meta {
+            display: flex;
+            gap: 20px;
+            margin-top: 16px;
+            font-size: 13px;
+            color: #666;
+        }
+
+        .modal-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .modal-body {
+            font-size: 15px;
+            line-height: 1.8;
+            color: #444;
+        }
+
+        .modal-body h2 {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-top: 28px;
+            margin-bottom: 16px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .modal-body h3 {
+            font-size: 17px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-top: 20px;
+            margin-bottom: 12px;
+        }
+
+        .modal-body p {
+            margin-bottom: 16px;
+        }
+
+        .modal-body ul,
+        .modal-body ol {
+            margin-left: 24px;
+            margin-bottom: 16px;
+        }
+
+        .modal-body li {
+            margin-bottom: 8px;
+        }
+
+        .modal-body strong {
+            font-weight: 700;
+            color: #1a1a1a;
+        }
+
+        .modal-body em,
+        .modal-body i {
+            font-style: italic;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px 20px;
+            color: white;
+        }
+
+        .spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        /*
+        ====================================================================
+        CSS ANIMATIONS - Define smooth entrance and loading effects
+        ====================================================================
+        @keyframes defineanimatios referenced by animation property.
+        Each keyframe defines progression from 'from' (start) to 'to' (end).
+        Elements can use these animations repeatedly.
+        */
+
+        /* SPIN ANIMATION - rotating spinner for loading indicator */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }      /* Start at 0 degrees */
+            100% { transform: rotate(360deg); }  /* Full 360 degree rotation */
+        }
+
+        /* SLIDE DOWN ANIMATION - header slides down from above */
+        @keyframes slideDown {
+            from {
+                opacity: 0;              /* Start invisible */
+                transform: translateY(-30px);  /* Start 30px above */
+            }
+            to {
+                opacity: 1;              /* End fully visible */
+                transform: translateY(0);      /* End at normal position */
+            }
+        }
+
+        /* FADE IN UP ANIMATION - articles fade in while sliding up */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;              /* Start invisible */
+                transform: translateY(30px);   /* Start 30px below */
+            }
+            to {
+                opacity: 1;              /* End fully visible */
+                transform: translateY(0);      /* End at normal position */
+            }
+        }
+
+        .end-message {
+            text-align: center;
+            color: white;
+            padding: 40px 20px;
+            font-size: 18px;
+            margin-top: 40px;
+        }
+
+        .emoji {
+            font-size: 32px;
+            margin-right: 10px;
+        }
+
+        /*
+        ====================================================================
+        RESPONSIVE DESIGN - Mobile adjustments for screens 768px and smaller
+        ====================================================================
+        @media (max-width: 768px) applies CSS ONLY on small screens.
+        On mobile, the card layout changes from 2-column to 1-column
+        (image stacks above content instead of beside it).
+        */
+        @media (max-width: 768px) {
+            /* Smaller heading on mobile */
+            header h1 {
+                font-size: 36px;  /* Reduce from 48px */
+            }
+
+            /* Stack image ABOVE content on mobile (1 column instead of 2) */
+            .news-card {
+                grid-template-columns: 1fr;  /* Single column layout */
+            }
+
+            /* Reduce image height on small screens */
+            .news-image {
+                height: 250px;  /* Reduce from 300px */
+            }
+
+            /* Smaller title on mobile */
+            .news-title {
+                font-size: 22px;  /* Reduce from 28px */
+            }
+
+            /* Tighter spacing on mobile */
+            .news-content {
+                padding: 20px;  /* Reduce from 32px */
+            }
+
+            /* Reduce gap on mobile */
+            header {
+                margin-bottom: 30px;  /* Reduce from 50px */
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>✨ Good News Daily</h1>
+            <p>Scroll down for more positive stories that restore faith in humanity</p>
+        </header>
+
+        <div class="news-grid" id="newsGrid"></div>
+
+        <div class="loading" id="loadingIndicator" style="display: none;">
+            <div class="spinner"></div>
+            <p>Loading more good news...</p>
+        </div>
+
+        <div class="end-message" id="endMessage" style="display: none;">
+            <span class="emoji">🌟</span>
+            <p>You've reached the end for now. Check back tomorrow for more good news!</p>
+        </div>
+    </div>
+
+    <!-- Modal for displaying full article content -->
+    <div class="modal" id="articleModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title-section">
+                    <div class="modal-category" id="modalCategory"></div>
+                    <h1 id="modalTitle"></h1>
+                    <div class="modal-meta">
+                        <div class="modal-meta-item">
+                            <span>📅</span>
+                            <span id="modalDate"></span>
+                        </div>
+                        <div class="modal-meta-item">
+                            <span>📰</span>
+                            <span id="modalSource"></span>
+                        </div>
+                    </div>
+                </div>
+                <button class="modal-close" id="modalClose">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody"></div>
+        </div>
+    </div>
+
+    <script>
+        /*
+        ================================================================================
+                        JAVASCRIPT - INFINITE SCROLL SYSTEM
+        ================================================================================
+        
+        WHAT THIS DOES:
+        Creates an INFINITE scroll system that loads articles as user scrolls down.
+        Technical highlight: generates unlimited content from only 10 base stories!
+        
+        HOW IT WORKS (High Level):
+        1. Store 10 base stories as data
+        2. Create a function that generates infinite variations (with different prefixes)
+        3. Listen for scroll events
+        4. When user scrolls near bottom, generate more stories
+        5. Display them smoothly with animations
+        
+        LEARNING GOALS:
+        ✓ Understand event-driven programming (scroll events)
+        ✓ Learn DOM manipulation (creating and adding HTML elements)
+        ✓ See how functions can generate content algorithmically
+        ✓ Understand state management (tracking what's loaded)
+        ✓ Learn about asynchronous patterns (setTimeout, callbacks)
+        ✓ See closures and variable scope in action
+        
+        READING THIS CODE:
+        - Start with "BASE STORIES" section to understand data structure
+        - Look at getStory() function to understand infinite generation
+        - Examine createNewsCard() to see DOM creation
+        - Study window.addEventListener to understand scroll detection
+        
+        ================================================================================
+        */
+        
+        /*
+        ====================================================================
+        BASE STORIES DATA
+        ====================================================================
+        These 10 stories are the SOURCE TRUTH - all content comes from these.
+        Each story is an OBJECT with properties (emoji, category, title, etc).
+        We don't load all 100+ stories - we generate variations instead!
+        
+        NOTE: Real markdown articles from /news_articles folder will be
+        fetched from the backend server and displayed FIRST (at the top),
+        sorted by date (newest first). These base stories act as fallback.
+        
+        PROPERTY EXPLANATION:
+        - emoji: Visual representative emoji
+        - category: Topic area (Environment, Health, etc)
+        - title: Headline text
+        - description: Full article preview text
+        - source: Publication name
+        - date: When published
+        */
+        const baseStories = [
+            {
+                emoji: "🌍",
+                category: "Environment",
+                title: "Global Tree Planting Initiative Surpasses 15 Billion Trees",
+                description: "In a landmark achievement for environmental restoration, a coordinated worldwide effort to combat climate change and deforestation has successfully planted over 15 billion trees across all continents. The initiative, which began seven years ago with ambitious goals, has created millions of sustainable jobs in rural communities, improved air quality measurably in major cities, and restored ecosystems in previously degraded regions. Scientists report that the carbon sequestration potential of these planted forests could offset billions of tons of carbon dioxide over the coming decades. Indigenous communities have played a crucial role in the project, combining traditional ecological knowledge with modern conservation techniques to ensure the long-term survival and health of the restored forests.",
+                source: "GreenEarth News",
+                date: "Today"
+            },
+            {
+                emoji: "🏥",
+                category: "Health",
+                title: "New Cancer Treatment Shows 90% Remission Rate in Breakthrough Study",
+                description: "Researchers from leading medical institutions worldwide have unveiled a revolutionary immunotherapy treatment that achieves a 90% remission rate in previously incurable cancer cases. The groundbreaking therapy harnesses the patient's own immune system to target and eliminate cancer cells with unprecedented precision. Clinical trials involving thousands of patients across multiple continents have demonstrated dramatic improvements in survival rates and quality of life. The treatment works by training immune cells to recognize and destroy cancerous growths while leaving healthy tissue unharmed. With affordability improvements already underway, this discovery offers genuine hope to the millions of cancer patients worldwide who had previously faced limited treatment options. Medical experts are calling it one of the most significant breakthroughs in oncology of the past two decades.",
+                source: "Medical Today",
+                date: "Yesterday"
+            },
+            {
+                emoji: "🎓",
+                category: "Education",
+                title: "Free Online Education Reaches 500 Million Students Worldwide",
+                description: "In a transformative moment for global education, major online learning platforms have successfully provided high-quality educational content to over 500 million students across developing nations. The initiative addresses the critical global challenge of educational inequality, ensuring that students in remote villages and poor urban neighborhoods now have access to the same learning resources as those in wealthy countries. Teachers in underserved regions report that their students are achieving significantly higher test scores and demonstrating greater confidence in their academic abilities. The program has introduced curriculum in over 150 languages, making quality education genuinely accessible to marginalized communities. Universities from developed nations have partnered to create locally-relevant content while maintaining world-class standards. Experts predict that within a generation, this educational democratization will produce skilled professionals from populations previously cut off from opportunity.",
+                source: "Learning Hub",
+                date: "2 days ago"
+            },
+            {
+                emoji: "🚀",
+                category: "Technology",
+                title: "Clean Energy Now Provides 50% of Global Electricity Supply",
+                description: "A historic milestone has been reached as renewable energy sources including solar, wind, and hydroelectric power now generate 50% of the world's electricity. This unprecedented achievement represents a fundamental shift in global energy production and marks a turning point in humanity's fight against climate change. Technological advancements in solar efficiency and battery storage have made clean energy not just environmentally necessary but economically competitive with fossil fuels. Developing nations are particularly benefiting from the declining costs of renewable technology, allowing them to build modern energy infrastructure without the stranded assets of outdated coal and oil dependence. Industry experts report that clean energy investments have created more jobs than the entire fossil fuel industry previously employed. The momentum continues to accelerate, with projections suggesting 70% renewable electricity by 2030.",
+                source: "TechTimes",
+                date: "3 days ago"
+            },
+            {
+                emoji: "🤝",
+                category: "Community",
+                title: "Global Volunteer Movement Builds 1,000 Homes for Families in Need",
+                description: "An inspiring international coalition of volunteers, corporations, and nonprofits has successfully constructed over 1,000 dignified homes for families experiencing homelessness. The massive undertaking coordinated efforts across dozens of countries, mobilizing over 100,000 volunteer work hours and demonstrating the power of collective action. Each home, built using sustainable materials and modern construction techniques, provides not just shelter but a foundation for transformed lives. Participating families report dramatic improvements in children's school attendance, adult employment prospects, and overall mental health since obtaining stable housing. The project has also revitalized struggling neighborhoods, creating community gardens, playgrounds, and gathering spaces alongside the homes. Organizations involved report that the increased stability allows families to address health issues, pursue education, and contribute more fully to their communities.",
+                source: "Community Weekly",
+                date: "4 days ago"
+            },
+            {
+                emoji: "🐼",
+                category: "Wildlife",
+                title: "Endangered Species Population Doubles Following Five-Year Conservation Effort",
+                description: "One of the most uplifting environmental success stories in recent memory unfolded this week as populations of several critically endangered species have doubled over the past five years. Coordinated international conservation efforts have created protected habitats, reduced poaching through indigenous ranger programs, and implemented DNA-based monitoring systems to track recovery. The achievement encompasses species from diverse ecosystems including giant pandas, African elephants, Indian tigers, and numerous bird and amphibian species. Scientists attribute the success to combining legal protections with economic incentives for local communities to preserve wildlife habitats. The recovery demonstrates that extinction is not inevitable when sufficient resources and political will are committed to conservation. Conservation organizations are expanding successful programs to protect hundreds of additional species currently facing extinction threats.",
+                source: "Nature Today",
+                date: "5 days ago"
+            },
+            {
+                emoji: "💚",
+                category: "Social Good",
+                title: "Child Poverty Rates Decline by 40% in Global Achievement",
+                description: "In perhaps the most significant victory for global social progress in decades, international development organizations report that child poverty rates have dropped by 40% globally over the past ten years. This extraordinary improvement reflects coordinated efforts in education access, healthcare provision, and economic opportunity creation across developing nations. Millions of children who previously worked in hazardous conditions or missed school due to poverty now attend classes regularly and have prospects for better futures. The improvement is particularly pronounced in sub-Saharan Africa and Southeast Asia, where targeted interventions have proven remarkably effective. Programs combining microfinance, education subsidies, and healthcare access have created sustainable pathways out of poverty. Child labor has declined dramatically, with millions of children now able to pursue education instead of working to support their families. Development experts attribute success to both increased international aid and improved governance in recipient nations.",
+                source: "Good News Network",
+                date: "6 days ago"
+            },
+            {
+                emoji: "🔬",
+                category: "Science",
+                title: "Alzheimer's Vaccine Enters Critical Final Testing Phase with Stunning Results",
+                description: "A groundbreaking vaccine targeting Alzheimer's disease has advanced into final human clinical trials after demonstrating remarkable effectiveness in preventing cognitive decline. The therapeutic vaccine works by training the immune system to target amyloid-beta proteins that accumulate in the brains of Alzheimer's patients. Preliminary trials show that people receiving the vaccine maintain cognitive function while untreated patients in comparison groups experienced measurable mental decline. If successful in final trials, the vaccine could prevent the development of Alzheimer's disease in millions of people worldwide, rather than simply treating symptoms after brain damage occurs. The discovery represents a fundamental shift from managing disease to preventing it entirely. With over 150 million people projected to suffer from Alzheimer's by 2050, this preventive approach could spare hundreds of millions from this devastating illness.",
+                source: "Science Daily",
+                date: "1 week ago"
+            },
+            {
+                emoji: "🌱",
+                category: "Agriculture",
+                title: "Vertical Farming Revolution Ends Food Scarcity in Urban African Centers",
+                description: "An agricultural innovation reshaping food security in Africa has emerged as vertical farming systems transform vacant urban spaces into productive food production centers. Modern hydroponic and aeroponic systems allow African cities to grow fresh vegetables, fruits, and grains year-round regardless of climate conditions, while using 95% less water than traditional agriculture. The technology has moved from experimental installations to commercial operations providing consistent supplies of affordable fresh produce to formerly food-insecure neighborhoods. Young entrepreneurs, particularly women, are establishing themselves as vertical farm operators, creating economic opportunities in economically disadvantaged communities. The localized production model dramatically reduces transportation costs and environmental impact compared to importing food across continents. Nutritional improvements in communities adopting vertical-farmed produce have been documented, with reduced malnutrition and improved health outcomes. The proven model is rapidly expanding to other continents.",
+                source: "Agri-News",
+                date: "1 week ago"
+            },
+            {
+                emoji: "🎵",
+                category: "Culture",
+                title: "Young Artists from Around Globe Win International Recognition and Career Support",
+                description: "A newly established global arts initiative has identified and provided substantial support to thousands of young artists from disadvantaged backgrounds, launching previously undiscovered talent onto the international stage. The program recognizes that artistic genius exists everywhere but only becomes visible when resources and platforms are provided to develop and showcase it. Young musicians, visual artists, dancers, and writers from rural regions, refugee camps, and low-income neighborhoods have been connected with mentors, performance opportunities, and financial support to pursue their crafts. International audiences are discovering remarkable artists whose perspectives and styles reflect unique cultural backgrounds and lived experiences. Record galleries have funded exhibitions by previously unknown artists who now command significant recognition and sales. The initiative demonstrates that talent is universally distributed while opportunity has been historically concentrated, and that addressing that disparity unleashes extraordinary human creativity.",
+                source: "Arts Weekly",
+                date: "8 days ago"
+            }
+        ];
+
+        /*
+        ====================================================================
+        MARKDOWN ARTICLES LOADING
+        ====================================================================
+        Fetches real markdown articles from the backend server.
+        These are displayed FIRST in the infinite scroll (at the top).
+        Sorted by modification date: newest first.
+        
+        HOW IT WORKS:
+        1. Fetch /get-articles from backend server
+        2. Parse JSON response
+        3. Convert markdown articles to story format
+        4. Prepend to baseStories (so they appear first)
+        5. Automatically picks up new .md files added to news_articles folder
+        
+        If server is not running, it gracefully falls back to base stories.
+        */
+        
+        // Array to hold markdown articles from backend
+        let markdownArticles = [];
+        
+        // Fetch markdown articles from backend server
+        async function loadMarkdownArticles() {
+            try {
+                /* Attempt to fetch articles from backend server */
+                const response = await fetch('http://localhost:3000/get-articles');
+                
+                if (!response.ok) {
+                    console.warn('Could not fetch markdown articles (server may not be running)');
+                    return false;
+                }
+                
+                const data = await response.json();
+                
+                if (data.status === 'success' && data.articles && data.articles.length > 0) {
+                    /*
+                    Convert markdown articles to story format
+                    Add emoji based on category
+                    Include fullContent for modal display
+                    */
+                    markdownArticles = data.articles.map(article => ({
+                        emoji: getCategoryEmoji(article.category),
+                        category: article.category,
+                        title: article.title,
+                        description: article.description,
+                        source: article.source,
+                        date: article.date,
+                        fullContent: article.fullContent,  /* Full markdown content for modal */
+                        isMarkdown: true,  /* Flag to identify markdown articles */
+                        fileName: article.fileName
+                    }));
+                    
+                    /*
+                    Prepend markdown articles to the beginning
+                    They will be displayed first in the infinite scroll
+                    Sort is already done by server (newest first)
+                    */
+                    allStories = markdownArticles.concat(baseStories);
+                    console.log(`✓ Loaded ${markdownArticles.length} markdown articles from backend`);
+                    return true;
+                } else {
+                    console.warn('Invalid response from server or no articles found');
+                    allStories = baseStories;
+                    return false;
+                }
+            } catch (error) {
+                /*
+                Graceful fallback if server is not running
+                Just use base stories without markdown articles
+                */
+                console.warn('Backend server not available. Using base stories only.');
+                console.log('💡 Tip: Run "node server.js" in terminal to enable markdown article loading');
+                allStories = baseStories;
+                return false;
+            }
+        }
+        
+        /*
+        GET CATEGORY EMOJI
+        Assigns relevant emoji based on article category
+        */
+        function getCategoryEmoji(category) {
+            const emojiMap = {
+                'Psychology': '🧠',
+                'Health': '🏥',
+                'Science': '🔬',
+                'Environment': '🌍',
+                'Technology': '💻',
+                'Business': '💼',
+                'Culture': '🎭',
+                'Education': '🎓',
+                'News': '📰',
+                'Default': '✨'
+            };
+            
+            /* Find matching emoji or use default */
+            for (let key in emojiMap) {
+                if (category.toLowerCase().includes(key.toLowerCase())) {
+                    return emojiMap[key];
+                }
+            }
+            return emojiMap['Default'];
+        }
+        
+        /* Will be populated with base stories + markdown articles */
+        let allStories = baseStories;
+
+        /*
+        ====================================================================
+        STORY VARIATION GENERATOR FUNCTION
+        ====================================================================
+        CONCEPT: We have base stories but want infinite unique articles!
+        SOLUTION: Create variations by changing title prefix and date string.
+        
+        HOW IT WORKS:
+        - Takes baseStory from array
+        - Adds a different prefix ("Breaking News:", "New Report Shows", etc)
+        - Changes the date using modulo operator (%) to cycle through dates
+        - Returns a NEW object with modified title and date
+        - Original baseStory is NOT changed (immutable pattern)
+        
+        TECHNICAL NOTES:
+        - Uses spread operator (...baseStory) to copy all properties from base
+        - Then OVERRIDES title and date with variations
+        - Modulo operator (%) cycles through arrays: 0,1,2,...,max,0,1,2...
+        
+        PARAMETERS:
+        - storyIndex: which story from baseStories to use
+        - variationNumber: which variation (0, 1, 2, ... for different prefixes)
+        */
+        function generateStoryVariations(storyIndex, variationNumber) {
+            /* Get base story, cycling through with modulo operator */
+            const baseStory = allStories[storyIndex % allStories.length];
+            
+            /* If this is a markdown article, return it without modifications */
+            if (baseStory.isMarkdown) {
+                return baseStory;
+            }
+            
+            /* Array of title prefixes - vary the wording */
+            const variations = [
+                "New Report Shows",
+                "Breaking News:",
+                "Latest Update:",
+                "Exciting Development:",
+                "Global Achievement:",
+                "Major Milestone:",
+                "Historic Moment:",
+                "Pioneering Effort:",
+                "Remarkable Progress:"
+            ];
+            
+            /* Array of different date strings */
+            const daysAgo = ["Today", "Yesterday", "2 days ago", "3 days ago", "1 week ago", "2 weeks ago"];
+            
+            /*
+            Return a NEW object combining base story with variations.
+            Spread operator (...) copies all properties from baseStory.
+            Then we override title and date with variation selections.
+            */
+            return {
+                ...baseStory,  /* Copy all properties: emoji, category, description, etc */
+                /* Create new title: prefix + original title */
+                title: variations[variationNumber % variations.length] + " " + baseStory.title,
+                /* Select a different date string */
+                date: daysAgo[variationNumber % daysAgo.length]
+            };
+        }
+
+        /*
+        ====================================================================
+        GET STORY FUNCTION - Main interface for generating content
+        ====================================================================
+        CONCEPT: Convert a simple index (0, 1, 2, 3...) into a real story.
+        This allows INFINITE scrolling by just asking for story #0, #1, #2, etc.
+        
+        THE MATH TRICK (This is the KEY to infinite content):
+        - baseIndex = index % 10        → Cycles base stories: 0,1,2,...,9,0,1,2...
+        - variationNumber = index / 10  → Cycles variations: 0,0,...,1,1,...
+        
+        EXAMPLES:
+        - getStory(0) → uses baseStory[0], no prefix variation
+        - getStory(5) → uses baseStory[5]
+        - getStory(10) → uses baseStory[0] AGAIN, but different prefix!
+        - getStory(11) → uses baseStory[1], different prefix
+        - getStory(100) → uses baseStory[0], prefix cycles through again
+        
+        This mathematical approach generates unlimited unique content!
+        */
+        function getStory(index) {
+            /* Which of the available stories to use (cycling through all) */
+            const baseIndex = index % allStories.length;
+            /* How many times through the stories (determines variation) */
+            const variationNumber = Math.floor(index / allStories.length);
+            // Generate and return the modified story
+            return generateStoryVariations(baseIndex, variationNumber);
+        }
+
+        /*
+        ====================================================================
+        STATE VARIABLES - Track the infinite scroll system
+        ====================================================================
+        These variables PERSIST between function calls and remember state.
+        */
+
+        
+        /* Dynamic array that GROWS as user scrolls - stores all displayed articles */
+        let goodNewsData = [];
+        
+        /* Track how many articles have been processed so far */
+        let currentIndex = 0;
+        /* How many articles to load each time user scrolls to bottom */
+        const itemsPerLoad = 6;
+        /* Flag to prevent multiple simultaneous loads (prevents duplicates) */
+        let isLoading = false;
+
+        /*
+        ====================================================================
+        DOM ELEMENT CACHING
+        ====================================================================
+        Store references to HTML elements in variables.
+        document.getElementById() searches the entire page - SLOW operation.
+        Storing references in variables is much faster than repeated searches!
+        */
+        const newsGrid = document.getElementById('newsGrid');          /* Container for articles */
+        const loadingIndicator = document.getElementById('loadingIndicator');  /* "Loading..." message */
+        const endMessage = document.getElementById('endMessage');      /* "End" message (not used) */
+
+        /*
+        ====================================================================
+        CREATE NEWS CARD FUNCTION
+        ====================================================================
+        Converts a story OBJECT into an HTML ELEMENT ready to display.
+        This is DOM MANIPULATION - creating, configuring, returning elements.
+        
+        WHAT IT DOES:
+        1. Creates a new <div> element
+        2. Adds CSS class for styling
+        3. Sets animation delay for staggered entrance
+        4. Fills with HTML content using template literal
+        5. Returns the element (ready to add to page)
+        
+        PARAMETERS:
+        - newsItem: object with emoji, category, title, description, source, date
+        - delay: animation delay index (0,1,2... for staggered effect)
+        
+        RETURNS:
+        - HTML element ready to DOM.appendChild() into the page
+        */
+        function createNewsCard(newsItem, delay) {
+            /* Create a new empty HTML div */
+            const card = document.createElement('div');
+            /* Add CSS class to apply styles from stylesheet */
+            card.className = 'news-card';
+            /*
+            Set staggered animation delay
+            delay=0 → 0s, delay=1 → 0.1s, delay=2 → 0.2s, etc
+            Cards appear one after another smoothly
+            */
+            card.style.animationDelay = `${delay * 0.1}s`;
+            /*
+            Set the HTML content using JavaScript template literal (backticks)
+            Template literals allow ${variable} syntax to insert values
+            This creates: emoji | category, title, description, meta info
+            For markdown articles, add a "Read More" button
+            */
+            const readMoreButton = newsItem.isMarkdown ? `<button class="read-more-btn">Read Full Article →</button>` : '';
+            
+            card.innerHTML = `
+                <div class="news-image">${newsItem.emoji}</div>
+                <div class="news-content">
+                    <div class="news-category">${newsItem.category}</div>
+                    <h3 class="news-title">${newsItem.title}</h3>
+                    <p class="news-description">${newsItem.description}</p>
+                    <div class="news-meta">
+                        <span class="news-date">📅 ${newsItem.date}</span>
+                        <span class="news-source">${newsItem.source}</span>
+                    </div>
+                    ${readMoreButton}
+                </div>
+            `;
+            
+            /* Add click event for markdown articles to open full content modal */
+            if (newsItem.isMarkdown) {
+                card.classList.add('markdown-article');
+                card.addEventListener('click', (e) => {
+                    /* Only trigger if clicking on the button or card itself, not links */
+                    if (e.target.tagName !== 'A') {
+                        openArticleModal(newsItem);
+                    }
+                });
+            }
+            
+            /* Return the fully constructed HTML element */
+            return card;
+        }
+
+        /*
+        ====================================================================
+        MODAL FUNCTIONS - Display full article content
+        ====================================================================
+        openArticleModal(newsItem) - Opens modal and populates with article content
+        closeArticleModal() - Closes the modal
+        */
+
+        function openArticleModal(newsItem) {
+            /* Get the modal element and content areas */
+            const modal = document.getElementById('articleModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalCategory = document.getElementById('modalCategory');
+            const modalDate = document.getElementById('modalDate');
+            const modalSource = document.getElementById('modalSource');
+            const modalBody = document.getElementById('modalBody');
+
+            /* Populate modal with article data */
+            modalTitle.textContent = newsItem.title;
+            modalCategory.textContent = newsItem.category;
+            modalDate.textContent = newsItem.date;
+            modalSource.textContent = newsItem.source;
+            
+            /* Convert markdown content to HTML */
+            /* Simple markdown conversion: 
+               - ## headers become <h2>
+               - > quotes become blockquote
+               - ** bold ** becomes <strong>
+               - \n\n becomes paragraphs
+            */
+            let htmlContent = newsItem.fullContent || newsItem.description;
+            
+            /* Replace markdown headers */
+            htmlContent = htmlContent.replace(/^### (.*?)$/gm, '<h3>$1</h3>');
+            htmlContent = htmlContent.replace(/^## (.*?)$/gm, '<h2>$1</h2>');
+            htmlContent = htmlContent.replace(/^# (.*?)$/gm, '<h1>$1</h1>');
+            
+            /* Replace bold text */
+            htmlContent = htmlContent.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            
+            /* Replace italic text */
+            htmlContent = htmlContent.replace(/\*(.*?)\*/g, '<em>$1</em>');
+            
+            /* Replace line breaks with paragraphs */
+            const paragraphs = htmlContent.split('\n\n').filter(p => p.trim());
+            htmlContent = paragraphs.map(p => `<p>${p.trim()}</p>`).join('');
+            
+            /* Set the HTML content in modal body */
+            modalBody.innerHTML = htmlContent;
+            
+            /* Show the modal */
+            modal.classList.add('active');
+            
+            /* Prevent body scroll when modal is open */
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeArticleModal() {
+            /* Get the modal element */
+            const modal = document.getElementById('articleModal');
+            
+            /* Hide the modal */
+            modal.classList.remove('active');
+            
+            /* Allow body scroll again */
+            document.body.style.overflow = 'auto';
+        }
+
+        /*
+        ====================================================================
+        LOAD MORE NEWS FUNCTION - Heart of infinite scroll
+        ====================================================================
+        This function GENERATES new stories and DISPLAYS them on the page.
+        Called when user scrolls near the bottom.
+        
+        PROCESS:
+        1. Guard against duplicate loads
+        2. Show loading indicator
+        3. Delay 800ms (simulates network)
+        4. Generate next 6 stories
+        5. Create HTML cards from stories
+        6. Add cards to page
+        7. Hide loading indicator
+        8. Reset flag
+        */
+        function loadMoreNews() {
+            /* Guard clause: exit immediately if already loading (prevent duplicates) */
+            if (isLoading) return;
+
+            /* Set flag to prevent other calls during load */
+            isLoading = true;
+            /* Show the spinner and "Loading..." message */
+            loadingIndicator.style.display = 'block';
+
+            /*
+            setTimeout delays code execution - simulates network/server delay
+            In a real app, this would be an API call to fetch from server
+            Here we use 800ms for visual polish/user feedback
+            The function inside runs AFTER 800ms
+            */
+            setTimeout(() => {
+                /*
+                GENERATE NEW STORIES
+                Remember where we are (what index) before adding new stories
+                */
+                const startIndex = goodNewsData.length;  /* Next article index */
+                /* Loop 6 times, generating each story */
+                for (let i = 0; i < itemsPerLoad; i++) {
+                    /*
+                    Call getStory() with sequential index (startIndex, startIndex+1, etc)
+                    Each story is unique due to modulo math inside getStory()
+                    */
+                    goodNewsData.push(getStory(startIndex + i));
+                }
+
+                /*
+                DISPLAY THE NEWLY GENERATED ARTICLES
+                slice(start, end) gets items between startIndex and startIndex+6
+                forEach cycles through each story and converts to visual card
+                */
+                goodNewsData.slice(startIndex, startIndex + itemsPerLoad).forEach((newsItem, index) => {
+                    /* Convert story object to HTML element */
+                    const card = createNewsCard(newsItem, index);
+                    /* Add element to page (appendChild adds as last child) */
+                    newsGrid.appendChild(card);
+                });
+
+                /* Update counter for next batch */
+                currentIndex += itemsPerLoad;
+
+                /* Hide the loading indicator */
+                isLoading = false;
+                loadingIndicator.style.display = 'none';
+            }, 800);
+        }
+
+        /*
+        ====================================================================
+        SCROLL EVENT LISTENER - Detects when user scrolls
+        ====================================================================
+        addEventListener attaches a function to an event.
+        When 'scroll' event fires, the arrow function runs automatically.
+        
+        SCROLL MATH (Understanding the detection):
+        window.innerHeight   = visible viewport height (e.g., 800px)
+        window.scrollY       = pixels scrolled down from top
+        scrollPosition       = bottom of visible area (height + scrollY)
+        documentElement.scrollHeight = total page height (entire content)
+        
+        TRIGGER CONDITION:
+        When scrollPosition >= pageHeight - 500
+        User is within 500px of the bottom
+        
+        EXAMPLE:
+        - Page is 5000px tall
+        - Can see 800px at a time
+        - When scroll position reaches 4500px+, trigger load
+        */
+        window.addEventListener('scroll', () => {
+            /* Calculate where the bottom of visible area is */
+            const scrollPosition = window.innerHeight + window.scrollY;
+            /* Get total height of all content */
+            const pageHeight = document.documentElement.scrollHeight;
+
+            /*
+            TRIGGER LOAD if:
+            1. User scrolled past (pageHeight - 500px) threshold, AND
+            2. Not already loading something
+            */
+            if (scrollPosition >= pageHeight - 500 && !isLoading) {
+                /* Call function to load more articles */
+                loadMoreNews();
+            }
+        });
+
+        /*
+        ====================================================================
+        MODAL EVENT LISTENERS - Setup close handlers
+        ====================================================================
+        */
+        
+        /* Get modal elements */
+        const modal = document.getElementById('articleModal');
+        const modalClose = document.getElementById('modalClose');
+        
+        /* Close modal when close button is clicked */
+        if (modalClose) {
+            modalClose.addEventListener('click', closeArticleModal);
+        }
+        
+        /* Close modal when clicking outside the content (on the overlay) */
+        if (modal) {
+            modal.addEventListener('click', (e) => {
+                /* Only close if clicking directly on background, not on content */
+                if (e.target === modal) {
+                    closeArticleModal();
+                }
+            });
+        }
+        
+        /* Close modal when ESC key is pressed */
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeArticleModal();
+            }
+        });
+
+        /*
+        ====================================================================
+        INITIAL PAGE LOAD - Runs when page first loads
+        ====================================================================
+        These lines execute automatically when browser loads the page.
+        They populate the page with initial articles before user scrolls.
+        */
+        
+        /* Remember starting position (should be 0) */
+        const startingIndex = goodNewsData.length;
+        
+        /*
+        LOAD MARKDOWN ARTICLES FIRST
+        Fetch articles from backend server before displaying
+        This ensures markdown articles appear first on the page
+        Then mock news is loaded after when user scrolls
+        */
+        loadMarkdownArticles().then(() => {
+            /* Initialize goodNewsData with ONLY markdown articles first */
+            goodNewsData = [];  /* Reset data array */
+            
+            /* Add all markdown articles to the display */
+            if (markdownArticles && markdownArticles.length > 0) {
+                goodNewsData = [...markdownArticles];
+                console.log(`✓ Displaying ${markdownArticles.length} markdown articles first`);
+            }
+            
+            /* Display the markdown articles immediately */
+            loadMoreNews();
+            
+            /* Now when user scrolls, mock news will be generated after the markdown articles */
+            /* currentIndex tracks position in allStories */
+        });
+    </script>
+</body>
+</html>
