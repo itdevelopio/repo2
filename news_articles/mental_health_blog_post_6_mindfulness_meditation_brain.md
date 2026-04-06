@@ -55,6 +55,19 @@ The science is clear: the human brain is not fixed. With consistent practice, we
 
 ---
 
+## Key Concepts at a Glance
+
+| Concept | What It Means | Why It Matters |
+|---------|--------------|----------------|
+| **Neuroplasticity** | The brain's ability to physically change its structure and function through repeated experience and practice | Means that meditation is not just a relaxation technique but a form of mental training that literally reshapes the brain |
+| **Prefrontal cortex (PFC)** | The brain region governing rational thought, emotional regulation, self-awareness, and executive decision-making | Strengthened by meditation practice; counteracts the cognitive and emotional impairments associated with stress and aging |
+| **Amygdala** | The brain's threat-detection and fear-response center | Reduced gray matter density after MBSR corresponds to less anxiety, less reactivity, and greater emotional stability |
+| **Default Mode Network (DMN)** | A brain network active during rest and self-referential thought, associated with rumination and mind-wandering when dysregulated | Meditation reduces unhelpful DMN activity, breaking cycles of worry and depressive thought |
+| **Mindfulness-Based Stress Reduction (MBSR)** | An 8-week structured program of meditation, yoga, and group discussion developed by Dr. Jon Kabat-Zinn | The most extensively researched mindfulness intervention, proven to reduce anxiety, depression, and chronic pain |
+| **Loving-kindness meditation (LKM)** | A meditation practice focused on cultivating feelings of warmth, compassion, and goodwill toward oneself and others | Increases positive emotions, reduces implicit bias, and builds lasting psychological resources (the "upward spiral") |
+
+---
+
 ## Sources
 
 1. **Kabat-Zinn, J. (1990).** *Full Catastrophe Living: Using the Wisdom of Your Body and Mind to Face Stress, Pain, and Illness.* Delacorte Press. (Revised edition 2013, Bantam Books.)

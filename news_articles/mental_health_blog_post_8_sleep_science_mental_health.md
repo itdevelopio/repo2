@@ -55,6 +55,19 @@ The message from sleep science is compelling: investing in sleep quality is not 
 
 ---
 
+## Key Concepts at a Glance
+
+| Concept | What It Means | Why It Matters |
+|---------|--------------|----------------|
+| **Glymphatic system** | The brain's dedicated waste-clearance network that flushes toxic metabolic byproducts (including Alzheimer's-linked proteins) during deep sleep | A single night of poor sleep measurably increases brain toxin levels; chronic disruption is a leading modifiable dementia risk factor |
+| **REM sleep** | The stage of sleep characterized by vivid dreaming, during which emotional memories are processed and their distress stripped away | Disrupted REM sleep—common in depression, anxiety, and PTSD—traps people in heightened emotional reactivity and trauma |
+| **Amygdala reactivity** | The intensity of the brain's threat-and-fear response | Sleep deprivation increases amygdala reactivity by up to 60%, making people more anxious, irritable, and pessimistic |
+| **CBT-I (Cognitive Behavioral Therapy for Insomnia)** | A structured psychological treatment for chronic insomnia involving sleep restriction, stimulus control, and cognitive restructuring | Recognized as the first-line treatment for insomnia by major medical bodies; produces more durable improvements than sleeping pills |
+| **Circadian rhythm** | The brain and body's internal 24-hour biological clock governing the timing of sleep, wakefulness, and mood | Consistent sleep/wake schedules strengthen circadian rhythm, which is one of the strongest predictors of mood stability |
+| **Bidirectional relationship** | The dynamic where poor sleep worsens mental health conditions and mental health problems disrupt sleep, each feeding the other | Breaking this cycle—often by treating sleep directly—can independently reduce depression, anxiety, and PTSD symptom severity |
+
+---
+
 ## Sources
 
 1. **Walker, M. (2017).** *Why We Sleep: Unlocking the Power of Sleep and Dreams.* Scribner. Available at: https://www.sleepdiplomat.com
