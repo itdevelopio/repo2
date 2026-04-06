@@ -25,3 +25,15 @@ In practice, this means future treatments may need to be more personalized. Some
 Psychedelic research is moving from curiosity to clinical strategy. The current challenge is not just proving that these compounds can change mood, but figuring out when, for whom, and under what conditions they are safe and effective [web:22][web:25].
 
 That is what makes today’s psychology news exciting: it is not just about a drug, but about how the brain changes, how behavior shifts, and how treatment might become more precise in the future.
+---
+
+## Key Concepts at a Glance
+
+| Concept | What It Means | Why It Matters |
+|---------|--------------|----------------|
+| **Psilocybin** | A naturally occurring psychedelic compound found in certain mushrooms that produces profound alterations in perception and mood | Under clinical investigation as a fast-acting antidepressant with potentially lasting effects from very few doses |
+| **Antidepressant-like behavior** | Observable reduction in depressive symptoms, measured in animal studies through tests such as the forced swim test | Provides a model for understanding the neurological mechanisms of psilocybin's mood effects |
+| **Neuroplasticity** | The brain's ability to reorganize and form new neural connections in response to experience or substances | Explains how psilocybin may produce lasting behavioral changes even after the drug leaves the body |
+| **Dose-response relationship** | The principle that different doses of a substance produce different effects, and more is not always better | Suggests future psilocybin therapies must be personalized rather than applying a one-size-fits-all dose |
+| **Serotonin receptor (5-HT2A)** | The primary brain receptor through which psilocybin exerts its effects | Targeting this receptor mediates changes in mood, perception, and neuroplastic remodeling |
+| **Supervised clinical context** | A structured setting with trained clinicians present before, during, and after psychedelic administration | Essential for safety, managing acute psychological effects, and maximizing therapeutic outcomes |
