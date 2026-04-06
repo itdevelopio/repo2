@@ -380,6 +380,10 @@ CONCEPTS COVERED:
         Each story is an OBJECT with properties (emoji, category, title, etc).
         We don't load all 100+ stories - we generate variations instead!
         
+        NOTE: Real markdown articles from /news_articles folder will be
+        fetched from the backend server and displayed FIRST (at the top),
+        sorted by date (newest first). These base stories act as fallback.
+        
         PROPERTY EXPLANATION:
         - emoji: Visual representative emoji
         - category: Topic area (Environment, Health, etc)
@@ -473,9 +477,114 @@ CONCEPTS COVERED:
 
         /*
         ====================================================================
+        MARKDOWN ARTICLES LOADING
+        ====================================================================
+        Fetches real markdown articles from the backend server.
+        These are displayed FIRST in the infinite scroll (at the top).
+        Sorted by modification date: newest first.
+        
+        HOW IT WORKS:
+        1. Fetch /get-articles from backend server
+        2. Parse JSON response
+        3. Convert markdown articles to story format
+        4. Prepend to baseStories (so they appear first)
+        5. Automatically picks up new .md files added to news_articles folder
+        
+        If server is not running, it gracefully falls back to base stories.
+        */
+        
+        // Array to hold markdown articles from backend
+        let markdownArticles = [];
+        
+        // Fetch markdown articles from backend server
+        async function loadMarkdownArticles() {
+            try {
+                /* Attempt to fetch articles from backend server */
+                const response = await fetch('http://localhost:3000/get-articles');
+                
+                if (!response.ok) {
+                    console.warn('Could not fetch markdown articles (server may not be running)');
+                    return false;
+                }
+                
+                const data = await response.json();
+                
+                if (data.status === 'success' && data.articles && data.articles.length > 0) {
+                    /*
+                    Convert markdown articles to story format
+                    Add emoji based on category
+                    */
+                    markdownArticles = data.articles.map(article => ({
+                        emoji: getCategoryEmoji(article.category),
+                        category: article.category,
+                        title: article.title,
+                        description: article.description,
+                        source: article.source,
+                        date: article.date,
+                        isMarkdown: true,  /* Flag to identify markdown articles */
+                        fileName: article.fileName
+                    }));
+                    
+                    /*
+                    Prepend markdown articles to the beginning
+                    They will be displayed first in the infinite scroll
+                    Sort is already done by server (newest first)
+                    */
+                    allStories = markdownArticles.concat(baseStories);
+                    console.log(`✓ Loaded ${markdownArticles.length} markdown articles from backend`);
+                    return true;
+                } else {
+                    console.warn('Invalid response from server or no articles found');
+                    allStories = baseStories;
+                    return false;
+                }
+            } catch (error) {
+                /*
+                Graceful fallback if server is not running
+                Just use base stories without markdown articles
+                */
+                console.warn('Backend server not available. Using base stories only.');
+                console.log('💡 Tip: Run "node server.js" in terminal to enable markdown article loading');
+                allStories = baseStories;
+                return false;
+            }
+        }
+        
+        /*
+        GET CATEGORY EMOJI
+        Assigns relevant emoji based on article category
+        */
+        function getCategoryEmoji(category) {
+            const emojiMap = {
+                'Psychology': '🧠',
+                'Health': '🏥',
+                'Science': '🔬',
+                'Environment': '🌍',
+                'Technology': '💻',
+                'Business': '💼',
+                'Culture': '🎭',
+                'Education': '🎓',
+                'News': '📰',
+                'Default': '✨'
+            };
+            
+            /* Find matching emoji or use default */
+            for (let key in emojiMap) {
+                if (category.toLowerCase().includes(key.toLowerCase())) {
+                    return emojiMap[key];
+                }
+            }
+            return emojiMap['Default'];
+        }
+        
+        /* Will be populated with base stories + markdown articles */
+        let allStories = baseStories;
+
+        /*
+        ====================================================================
         STORY VARIATION GENERATOR FUNCTION
         ====================================================================
-        CONCEPT: We have 10 base stories but want infinite unique articles!
+        CONCEPT: We have base stories but want infinite unique articles!
         SOLUTION: Create variations by changing title prefix and date string.
         
         HOW IT WORKS:
@@ -491,12 +600,17 @@ CONCEPTS COVERED:
         - Modulo operator (%) cycles through arrays: 0,1,2,...,max,0,1,2...
         
         PARAMETERS:
-        - storyIndex: which story from baseStories to use (0-9)
+        - storyIndex: which story from baseStories to use
         - variationNumber: which variation (0, 1, 2, ... for different prefixes)
         */
         function generateStoryVariations(storyIndex, variationNumber) {
-            /* Get base story, cycling through 0-9 with modulo operator */
-            const baseStory = baseStories[storyIndex % baseStories.length];
+            /* Get base story, cycling through with modulo operator */
+            const baseStory = allStories[storyIndex % allStories.length];
+            
+            /* If this is a markdown article, return it without modifications */
+            if (baseStory.isMarkdown) {
+                return baseStory;
+            }
             
             /* Array of title prefixes - vary the wording */
             const variations = [
@@ -549,10 +663,10 @@ CONCEPTS COVERED:
         This mathematical approach generates unlimited unique content!
         */
         function getStory(index) {
-            // Which of the 10 base stories to use (0-9, then repeat)
-            const baseIndex = index % baseStories.length;
-            // How many complete cycles through the 10 stories (determines variety)
-            const variationNumber = Math.floor(index / baseStories.length);
+            /* Which of the available stories to use (cycling through all) */
+            const baseIndex = index % allStories.length;
+            /* How many times through the stories (determines variation) */
+            const variationNumber = Math.floor(index / allStories.length);
             // Generate and return the modified story
             return generateStoryVariations(baseIndex, variationNumber);
         }
@@ -757,12 +871,21 @@ CONCEPTS COVERED:
         
         /* Remember starting position (should be 0) */
         const startingIndex = goodNewsData.length;
-        /* Generate first 6 stories (indices 0-5) */
-        for (let i = 0; i < 6; i++) {
-            goodNewsData.push(getStory(i));
-        }
-        /* Display them on the page immediately */
-        loadMoreNews();
+        
+        /*
+        LOAD MARKDOWN ARTICLES FIRST
+        Fetch articles from backend server before displaying
+        This ensures markdown articles appear at the top if server is running
+        */
+        loadMarkdownArticles().then(() => {
+            /* After markdown articles are loaded, generate initial 6 stories */
+            goodNewsData = [];  /* Reset data array */
+            for (let i = 0; i < 6; i++) {
+                goodNewsData.push(getStory(i));
+            }
+            /* Display them on the page immediately */
+            loadMoreNews();
+        });
     </script>
 </body>
 </html>
