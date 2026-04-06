@@ -1,4 +1,4 @@
-# Psychological News of Today: New Research on Psilocybin and the Brain
+# New Research on Psilocybin and the Brain
 
 Today’s psychology coverage also highlights continued interest in psychedelics, especially psilocybin. Recent reporting from PsyPost describes research suggesting that psilocybin’s antidepressant effects may be linked to lasting changes in how neurons fire, even after some physical brain changes fade [web:22].
 

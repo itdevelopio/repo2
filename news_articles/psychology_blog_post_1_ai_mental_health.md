@@ -1,4 +1,4 @@
-# Psychological News of Today: Responsible AI in Mental Health
+# Responsible AI in Mental Health
 
 Today's psychology news is centered on one of the biggest questions in modern mental health: how should artificial intelligence be used when people are emotionally vulnerable? The World Health Organization (WHO) recently issued a comprehensive warning that generative AI tools are being deployed for mental health support and psychological counseling even though they were not originally designed, tested, or validated for that purpose. This growing trend raises critical questions about efficacy, safety, and ethical responsibility in the digital mental health space.
 

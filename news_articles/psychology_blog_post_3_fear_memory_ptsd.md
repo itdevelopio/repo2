@@ -1,4 +1,4 @@
-# Psychological News of Today: Brain Cells, Fear, and PTSD
+# Brain Cells, Fear, and PTSD
 
 Another important psychology story today comes from brain research on fear and trauma. ScienceDaily reported that astrocytes, long thought to be support cells, may actively help form, recall, and weaken fear memories [web:23].
 
