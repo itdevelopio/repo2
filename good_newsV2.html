@@ -833,52 +833,40 @@ CONCEPTS COVERED:
         }
 
         function getArticleImage(title, category) {
-            /* Map categories to Pexels search URLs that return real stock photos */
-            const categoryImages = {
-                'Psychology': [
-                    'https://images.pexels.com/photos/3807517/pexels-photo-3807517.jpeg',
-                    'https://images.pexels.com/photos/3962286/pexels-photo-3962286.jpeg',
-                    'https://images.pexels.com/photos/3957987/pexels-photo-3957987.jpeg'
-                ],
-                'Health': [
-                    'https://images.pexels.com/photos/3962286/pexels-photo-3962286.jpeg',
-                    'https://images.pexels.com/photos/3873471/pexels-photo-3873471.jpeg',
-                    'https://images.pexels.com/photos/4021283/pexels-photo-4021283.jpeg'
-                ],
-                'Science': [
-                    'https://images.pexels.com/photos/3825517/pexels-photo-3825517.jpeg',
-                    'https://images.pexels.com/photos/3952632/pexels-photo-3952632.jpeg',
-                    'https://images.pexels.com/photos/5632399/pexels-photo-5632399.jpeg'
-                ],
-                'Environment': [
-                    'https://images.pexels.com/photos/2265876/pexels-photo-2265876.jpeg',
-                    'https://images.pexels.com/photos/3962284/pexels-photo-3962284.jpeg',
-                    'https://images.pexels.com/photos/574282/pexels-photo-574282.jpeg'
-                ],
-                'Technology': [
-                    'https://images.pexels.com/photos/373543/pexels-photo-373543.jpeg',
-                    'https://images.pexels.com/photos/3945683/pexels-photo-3945683.jpeg',
-                    'https://images.pexels.com/photos/2882552/pexels-photo-2882552.jpeg'
-                ],
-                'Default': [
-                    'https://images.pexels.com/photos/3808517/pexels-photo-3808517.jpeg',
-                    'https://images.pexels.com/photos/3844663/pexels-photo-3844663.jpeg',
-                    'https://images.pexels.com/photos/3873501/pexels-photo-3873501.jpeg'
-                ]
+            /* Generate a unique image ID from article title */
+            let imageIndex = 0;
+            for (let i = 0; i < title.length; i++) {
+                imageIndex += title.charCodeAt(i);
+            }
+            
+            /* Map categories to image IDs for variety */
+            const categoryImageIds = {
+                'Psychology': [10, 20, 30],
+                'Health': [40, 50, 60],
+                'Science': [70, 80, 90],
+                'Environment': [100, 110, 120],
+                'Technology': [130, 140, 150],
+                'Business': [160, 170, 180],
+                'Culture': [190, 200, 210],
+                'Education': [220, 230, 240],
+                'News': [250, 260, 270],
+                'Default': [1, 2, 3, 4, 5, 6, 7, 8, 9]
             };
             
             /* Find matching category images */
-            let images = categoryImages['Default'];
-            for (let key in categoryImages) {
+            let ids = categoryImageIds['Default'];
+            for (let key in categoryImageIds) {
                 if (category.toLowerCase().includes(key.toLowerCase())) {
-                    images = categoryImages[key];
+                    ids = categoryImageIds[key];
                     break;
                 }
             }
             
-            /* Generate hash from title length to select different image */
-            const imageIndex = title.length % images.length;
-            return images[imageIndex];
+            /* Select image based on title length */
+            const selectedId = ids[imageIndex % ids.length];
+            
+            /* Use Picsum Photos for reliable, different images per article */
+            return `https://picsum.photos/600/400?random=${selectedId}`;
         }
         
         /* Will be populated with markdown articles from .md files */
