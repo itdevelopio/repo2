@@ -138,11 +138,19 @@ CONCEPTS COVERED:
         .news-image {
             width: 100%;                           /* Fill 400px column */
             height: 300px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);  /* Gradient background */
+            background: #f0f0f0;                   /* Light background as fallback only */
             display: flex;              /* Use flexbox to center emoji */
             align-items: center;        /* Vertical center */
             justify-content: center;    /* Horizontal center */
             font-size: 120px;           /* Large emoji */
+            overflow: hidden;           /* Ensure image doesn't overflow */
+        }
+
+        .news-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
         }
 
         /*
@@ -826,22 +834,12 @@ CONCEPTS COVERED:
 
         function getArticleImage(title, category) {
             /* Generate a unique seed from the article title for unique illustrations */
-            let seed = title.toLowerCase().replace(/[^a-z0-9]/g, '');
+            let seed = title.toLowerCase().replace(/[^a-z0-9]/g, '').substring(0, 50);
             
-            /* Use Robohash API which generates completely unique robot/creature designs per seed */
-            /* Robohash creates visually distinct SVG illustrations */
-            const sets = ['set1', 'set2', 'set3', 'set4'];
+            /* Use Multiavatar API which generates completely unique avatar designs */
+            /* Multiavatar creates SVG avatars with high visual distinctness */
             
-            /* Select different set based on the seed itself */
-            let setIndex = 0;
-            if (seed.length > 0) {
-                setIndex = seed.charCodeAt(0) % sets.length;
-            }
-            
-            const set = sets[setIndex];
-            
-            /* Robohash creates unique robotic creatures based on the seed */
-            return `https://robohash.org/${seed}?set=${set}&size=400x400`;
+            return `https://api.multiavatar.com/${seed}.svg`;
         }
         
         /* Will be populated with markdown articles from .md files */
